@@ -7,10 +7,13 @@ namespace Tetris
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
+
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Texture2D m_BlockShape;
+        Block m_Block;
 
         public Game1()
         {
@@ -39,7 +42,12 @@ namespace Tetris
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            m_Block = new Block(new Vector2(100, 100));
 
+            m_BlockShape = new Texture2D(graphics.GraphicsDevice, m_Block.GetWidth(), m_Block.GetHeight());
+            Color[] data = new Color[80 * 30];
+            for (int i = 0; i < data.Length; ++i) data[i] = Color.White;
+            m_BlockShape.SetData(data);
             // TODO: use this.Content to load your game content here
         }
 
@@ -61,7 +69,14 @@ namespace Tetris
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
+            if (m_Block.GetPosY() >= graphics.GraphicsDevice.Viewport.Height)
+            {
+                //notin
+            }
+            else
+            {
+                m_Block.Fall((int)(gameTime.ElapsedGameTime.TotalMilliseconds)/10);
+            }
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -73,9 +88,12 @@ namespace Tetris
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
+            spriteBatch.Begin();
+            spriteBatch.Draw(m_BlockShape, m_Block.GetOriginPos(), Color.White);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
