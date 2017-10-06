@@ -44,6 +44,22 @@ namespace Tetris
             spriteBatch = new SpriteBatch(GraphicsDevice);
             m_Block = new Block(new Vector2(100, 100));
 
+            bool[,] Grid;
+            Grid = new bool[20,12];
+            int p = 0;
+            for(p = 0; p < Grid.GetLength(0); p++)
+            {
+                int o = 0;
+                for (o = 0; o < Grid.GetLength(1); o++)
+                {
+                    Grid[p, o] = false;
+                }
+            }
+
+
+
+
+
             m_BlockShape = new Texture2D(graphics.GraphicsDevice, m_Block.GetWidth(), m_Block.GetHeight());
             Color[] data = new Color[80 * 30];
             for (int i = 0; i < data.Length; ++i) data[i] = Color.White;
