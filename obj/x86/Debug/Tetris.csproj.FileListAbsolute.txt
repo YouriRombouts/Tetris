@@ -23,3 +23,5 @@ C:\Users\Youri Rombouts\Documents\Visual Studio 2015\Projects\Tetris\Tetris\bin\
 C:\Users\Youri Rombouts\Documents\Visual Studio 2015\Projects\Tetris\Tetris\obj\x86\Debug\Tetris.csprojResolveAssemblyReference.cache
 C:\Users\Youri Rombouts\Documents\Visual Studio 2015\Projects\Tetris\Tetris\obj\x86\Debug\Tetris.exe
 C:\Users\Youri Rombouts\Documents\Visual Studio 2015\Projects\Tetris\Tetris\obj\x86\Debug\Tetris.pdb
+C:\Users\timgo\Documents\GitHub\Tetris\obj\x86\Debug\Tetris.exe
+C:\Users\timgo\Documents\GitHub\Tetris\obj\x86\Debug\Tetris.pdb
