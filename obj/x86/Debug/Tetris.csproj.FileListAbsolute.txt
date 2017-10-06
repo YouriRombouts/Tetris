@@ -25,3 +25,10 @@ C:\Users\Youri Rombouts\Documents\Visual Studio 2015\Projects\Tetris\Tetris\obj\
 C:\Users\Youri Rombouts\Documents\Visual Studio 2015\Projects\Tetris\Tetris\obj\x86\Debug\Tetris.pdb
 C:\Users\timgo\Documents\GitHub\Tetris\obj\x86\Debug\Tetris.exe
 C:\Users\timgo\Documents\GitHub\Tetris\obj\x86\Debug\Tetris.pdb
+C:\Users\Youri Rombouts\Documents\Visual Studio 2015\Projects\Tetris\Tetris\bin\Windows\x86\Debug\Content\legobaby.xnb
+C:\Users\Youri Rombouts\Documents\Visual Studio 2015\Projects\Tetris\Tetris\bin\Windows\x86\Debug\Content\legoblue.xnb
+C:\Users\Youri Rombouts\Documents\Visual Studio 2015\Projects\Tetris\Tetris\bin\Windows\x86\Debug\Content\legogreen.xnb
+C:\Users\Youri Rombouts\Documents\Visual Studio 2015\Projects\Tetris\Tetris\bin\Windows\x86\Debug\Content\legoorange.xnb
+C:\Users\Youri Rombouts\Documents\Visual Studio 2015\Projects\Tetris\Tetris\bin\Windows\x86\Debug\Content\legopurple.xnb
+C:\Users\Youri Rombouts\Documents\Visual Studio 2015\Projects\Tetris\Tetris\bin\Windows\x86\Debug\Content\legored.xnb
+C:\Users\Youri Rombouts\Documents\Visual Studio 2015\Projects\Tetris\Tetris\bin\Windows\x86\Debug\Content\legoyellow.xnb

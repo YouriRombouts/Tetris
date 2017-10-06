@@ -12,8 +12,9 @@ namespace Tetris
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Texture2D m_BlockShape;
         Block m_Block;
+        Texture2D LegoBlue;
+        Vector2 scale;
 
         public Game1()
         {
@@ -56,14 +57,10 @@ namespace Tetris
                 }
             }
 
+            LegoBlue = Content.Load<Texture2D>("legoblue");
+            int TargetX = 50;
+            scale = new Vector2(TargetX / (float)LegoBlue.Width, TargetX / (float)LegoBlue.Width);
 
-
-
-
-            m_BlockShape = new Texture2D(graphics.GraphicsDevice, m_Block.GetWidth(), m_Block.GetHeight());
-            Color[] data = new Color[80 * 30];
-            for (int i = 0; i < data.Length; ++i) data[i] = Color.White;
-            m_BlockShape.SetData(data);
             // TODO: use this.Content to load your game content here
         }
 
@@ -108,7 +105,7 @@ namespace Tetris
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            spriteBatch.Draw(m_BlockShape, m_Block.GetOriginPos(), Color.White);
+            spriteBatch.Draw(LegoBlue, m_Block.GetPos(), scale: scale);
             spriteBatch.End();
 
             base.Draw(gameTime);
