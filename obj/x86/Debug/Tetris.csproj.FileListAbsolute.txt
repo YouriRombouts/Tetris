@@ -32,3 +32,33 @@ C:\Users\Youri Rombouts\Documents\Visual Studio 2015\Projects\Tetris\Tetris\bin\
 C:\Users\Youri Rombouts\Documents\Visual Studio 2015\Projects\Tetris\Tetris\bin\Windows\x86\Debug\Content\legopurple.xnb
 C:\Users\Youri Rombouts\Documents\Visual Studio 2015\Projects\Tetris\Tetris\bin\Windows\x86\Debug\Content\legored.xnb
 C:\Users\Youri Rombouts\Documents\Visual Studio 2015\Projects\Tetris\Tetris\bin\Windows\x86\Debug\Content\legoyellow.xnb
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\Content\legobaby.xnb
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\Content\legoblue.xnb
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\Content\legogreen.xnb
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\Content\legoorange.xnb
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\Content\legopurple.xnb
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\Content\legored.xnb
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\Content\legoyellow.xnb
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\Tetris.exe
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\Tetris.pdb
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\MonoGame.Framework.dll
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\SharpDX.MediaFoundation.dll
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\SharpDX.dll
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\SharpDX.XAudio2.dll
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\SharpDX.DXGI.dll
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\SharpDX.Direct3D11.dll
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\SharpDX.Direct2D1.dll
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\SharpDX.XInput.dll
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\SharpDX.RawInput.dll
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\SharpDX.Direct3D9.dll
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\MonoGame.Framework.xml
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\SharpDX.MediaFoundation.xml
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\SharpDX.xml
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\SharpDX.XAudio2.xml
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\SharpDX.DXGI.xml
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\SharpDX.Direct3D11.xml
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\SharpDX.Direct2D1.xml
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\SharpDX.XInput.xml
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\SharpDX.RawInput.xml
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\SharpDX.Direct3D9.xml
+C:\Users\timgo\Documents\GitHub\Tetris\obj\x86\Debug\Tetris.csprojResolveAssemblyReference.cache

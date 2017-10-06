@@ -31,7 +31,9 @@ namespace Tetris
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            graphics.PreferredBackBufferHeight = 600;
+            graphics.PreferredBackBufferWidth = 360;
+            graphics.ApplyChanges();
             base.Initialize();
         }
 
@@ -58,7 +60,7 @@ namespace Tetris
             }
 
             LegoBlue = Content.Load<Texture2D>("legoblue");
-            int TargetX = 50;
+            int TargetX = 30;
             scale = new Vector2(TargetX / (float)LegoBlue.Width, TargetX / (float)LegoBlue.Width);
 
             // TODO: use this.Content to load your game content here
