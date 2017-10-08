@@ -60,7 +60,7 @@ namespace Tetris
             }
 
             LegoBlue = Content.Load<Texture2D>("legoblue");
-            int TargetX = 30;
+            int TargetX = m_Block.GetWidth();
             scale = new Vector2(TargetX / (float)LegoBlue.Width, TargetX / (float)LegoBlue.Width);
 
             // TODO: use this.Content to load your game content here
@@ -90,7 +90,7 @@ namespace Tetris
             }
             else
             {
-                m_Block.Fall((int)(gameTime.ElapsedGameTime.TotalMilliseconds)/10);
+                m_Block.Fall((int)gameTime.ElapsedGameTime.TotalSeconds);
             }
             // TODO: Add your update logic here
 
