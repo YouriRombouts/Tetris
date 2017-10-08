@@ -13,7 +13,7 @@ namespace Tetris
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Block m_Block;
-        Texture2D LegoBlue;
+        Texture2D LegoBlue, LegoBaby;
         Vector2 scale;
 
         public Game1()
@@ -45,7 +45,6 @@ namespace Tetris
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            m_Block = new Block(new Vector2(100, 100));
 
             bool[,] Grid;
             Grid = new bool[20,12];
@@ -59,10 +58,23 @@ namespace Tetris
                 }
             }
 
+            Vector2 [,] GridPos;
+            GridPos = new Vector2[20, 12];
+            int s = 0;
+            for (s = 0; s < GridPos.GetLength(0); s++)
+            {
+                int a = 0;
+                for (a = 0; a < GridPos.GetLength(1); a++)
+                {
+                    GridPos[s, a].X = (30 * a);
+                    GridPos[s, a].Y = (30 * s);
+                }
+            }
+            m_Block = new Block(new Vector2(0, 0));
             LegoBlue = Content.Load<Texture2D>("legoblue");
+            LegoBaby = Content.Load<Texture2D>("legobaby");
             int TargetX = m_Block.GetWidth();
             scale = new Vector2(TargetX / (float)LegoBlue.Width, TargetX / (float)LegoBlue.Width);
-
             // TODO: use this.Content to load your game content here
         }
 
@@ -82,6 +94,7 @@ namespace Tetris
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            // TODO: Add your update logic here
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             if (m_Block.GetPosY() >= graphics.GraphicsDevice.Viewport.Height)
@@ -92,7 +105,6 @@ namespace Tetris
             {
                 m_Block.Fall((int)gameTime.ElapsedGameTime.TotalSeconds);
             }
-            // TODO: Add your update logic here
 
             base.Update(gameTime);
         }
@@ -107,7 +119,7 @@ namespace Tetris
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            spriteBatch.Draw(LegoBlue, m_Block.GetPos(), scale: scale);
+            spriteBatch.Draw(LegoBaby, m_Block.GetPos() , scale: scale);
             spriteBatch.End();
 
             base.Draw(gameTime);

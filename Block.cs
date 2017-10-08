@@ -13,11 +13,13 @@ namespace Tetris
     {
         public int m_Height = 30;
         public int m_Width = 30;
+        public Vector2 GridPos = new Vector2(0, 0);
         public Vector2 m_Pos = new Vector2(0, 0);
         public Block(Vector2 Pos) { m_Pos = Pos; }
         public int GetHeight() { return m_Height; }
         public int GetWidth() { return m_Width; }
         public Vector2 GetPos() { return m_Pos; }
+        public Vector2 GetGridPos() { return GridPos; }
         public float GetPosY() { return m_Pos.Y + 30 ; }
         public virtual Vector2 GetOriginPos() { return new Vector2(m_Pos.X + m_Width/2, m_Pos.Y + 23); }
         public void MoveHorizontal(int distance) { m_Pos.X += distance; }
@@ -26,7 +28,7 @@ namespace Tetris
         {
             if(GameTime % 1 == 0)
             {
-                m_Pos.Y += 30;
+                m_Pos.Y += 0;
             }
             else
             {
