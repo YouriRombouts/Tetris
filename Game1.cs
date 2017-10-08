@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Tetris
 {
@@ -15,6 +16,7 @@ namespace Tetris
         Block m_Block;
         Texture2D LegoBlue, LegoBaby;
         Vector2 scale;
+        int PassedSeconds;
 
         public Game1()
         {
@@ -45,6 +47,8 @@ namespace Tetris
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            PassedSeconds = 0;
 
             bool[,] Grid;
             Grid = new bool[20,12];
@@ -97,15 +101,18 @@ namespace Tetris
             // TODO: Add your update logic here
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            if (m_Block.GetPosY() >= graphics.GraphicsDevice.Viewport.Height)
-            {
-                //notin
-            }
-            else
-            {
-                m_Block.Fall((int)gameTime.ElapsedGameTime.TotalSeconds);
-            }
 
+            double PassedGameTime = gameTime.TotalGameTime.TotalSeconds;
+            int Rounded = (int)Math.Round(PassedGameTime);
+
+            if (m_Block.GetPosY() != graphics.GraphicsDevice.Viewport.Height)
+            {
+                if (Rounded != PassedSeconds)
+                {
+                    m_Block.Fall();
+                    PassedSeconds++;
+                }
+            }
             base.Update(gameTime);
         }
 

@@ -24,17 +24,7 @@ namespace Tetris
         public virtual Vector2 GetOriginPos() { return new Vector2(m_Pos.X + m_Width/2, m_Pos.Y + 23); }
         public void MoveHorizontal(int distance) { m_Pos.X += distance; }
         public void SetPos(float NewPos) { m_Pos.Y = NewPos; }
-        public void Fall(double GameTime)
-        {
-            if(GameTime % 1 == 0)
-            {
-                m_Pos.Y += 0;
-            }
-            else
-            {
-                //wait
-            }            
-        }
+        public void Fall() { m_Pos.Y += 30; }
     }
 
     class Shape1x4 : Block
