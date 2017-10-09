@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Timers;
 
 namespace Tetris
 {
@@ -13,10 +14,11 @@ namespace Tetris
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Block m_Block;
+        Block m_ActiveBlock;
         Texture2D LegoBlue, LegoBaby;
         Vector2 scale;
-        int PassedSeconds;
+        KeyboardState previousKeyboardState, currentKeyboardState;
+
 
         public Game1()
         {
@@ -48,7 +50,11 @@ namespace Tetris
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            PassedSeconds = 0;
+
+            System.Timers.Timer aTimer = new System.Timers.Timer();
+            aTimer.Elapsed += new ElapsedEventHandler(Gravity);
+            aTimer.Interval = 1000;
+            aTimer.Enabled = true;
 
             bool[,] Grid;
             Grid = new bool[20,12];
@@ -74,10 +80,10 @@ namespace Tetris
                     GridPos[s, a].Y = (30 * s);
                 }
             }
-            m_Block = new Block(new Vector2(0, 0));
+            m_ActiveBlock = new Shape1x4(new Vector2(0, 0));
             LegoBlue = Content.Load<Texture2D>("legoblue");
             LegoBaby = Content.Load<Texture2D>("legobaby");
-            int TargetX = m_Block.GetWidth();
+            int TargetX = m_ActiveBlock.GetWidth();
             scale = new Vector2(TargetX / (float)LegoBlue.Width, TargetX / (float)LegoBlue.Width);
             // TODO: use this.Content to load your game content here
         }
@@ -96,24 +102,61 @@ namespace Tetris
         /// checking for collisions, gathering input, and playing audio.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
+
+        public void HandleInput()
+        {
+            previousKeyboardState = currentKeyboardState;
+            currentKeyboardState = Keyboard.GetState();
+        }
+
         protected override void Update(GameTime gameTime)
         {
             // TODO: Add your update logic here
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            double PassedGameTime = gameTime.TotalGameTime.TotalSeconds;
-            int Rounded = (int)Math.Round(PassedGameTime);
+            HandleInput();
 
-            if (m_Block.GetPosY() != graphics.GraphicsDevice.Viewport.Height)
+            if (currentKeyboardState.IsKeyDown(Keys.Up) && previousKeyboardState.IsKeyUp(Keys.Up))
             {
-                if (Rounded != PassedSeconds)
-                {
-                    m_Block.Fall();
-                    PassedSeconds++;
-                }
+                m_ActiveBlock.AddRotation();
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyUp(Keys.Left))
+            {
+                m_ActiveBlock.MoveHorizontal(-m_ActiveBlock.GetWidth());
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyUp(Keys.Right))
+            {
+                m_ActiveBlock.MoveHorizontal(m_ActiveBlock.GetWidth());
+            }
+
+            if (m_ActiveBlock.GetMaxPosY() > graphics.GraphicsDevice.Viewport.Height)
+            {
+                m_ActiveBlock.GBISY();
+            }
+
+            if (m_ActiveBlock.GetMaxPosX() > graphics.GraphicsDevice.Viewport.Width)
+            {
+                m_ActiveBlock.GBISX();
+            }
+            else if (m_ActiveBlock.GetPosX() < 0)
+            {
+                m_ActiveBlock.SetPosX(0);
             }
             base.Update(gameTime);
+        }
+
+        private void Gravity(object source, ElapsedEventArgs e)
+        {
+            if (m_ActiveBlock.GetMaxPosY() != graphics.GraphicsDevice.Viewport.Height && m_ActiveBlock.GetMaxPosY() < graphics.GraphicsDevice.Viewport.Height)
+            {
+                m_ActiveBlock.Fall();
+            }
+            else
+            {
+                //Verwijder m_ActiveBlock en vervang het door een ander object dat niet valt en verwijdert wordt bij een volle rij
+            }
         }
 
         /// <summary>
@@ -126,7 +169,7 @@ namespace Tetris
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            spriteBatch.Draw(LegoBaby, m_Block.GetPos() , scale: scale);
+            m_ActiveBlock.Draw(spriteBatch, scale, LegoBlue);
             spriteBatch.End();
 
             base.Draw(gameTime);
