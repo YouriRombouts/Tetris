@@ -11,7 +11,7 @@ namespace Tetris
 {
     class Block
     {
-        public int m_Height = 30;
+        public int m_Height = 25;
         public int m_Width = 30;
         public int m_Rotation = 0;
         public Vector2 GridPos = new Vector2(0, 0);
@@ -25,12 +25,13 @@ namespace Tetris
         public Vector2 GetGridPos() { return GridPos; }
         public virtual float GetMaxPosY() { return m_Pos.Y + m_Height; }
         public virtual float GetMaxPosX() { return m_Pos.X + m_Width; }
-        public void GBISY() { m_Pos.Y -= GetMaxPosY() - 600; }
+        //GBIS = Get Back In Screen
+        public void GBISY() { m_Pos.Y -= GetMaxPosY() - 500; }
         public void GBISX() { m_Pos.X -= GetMaxPosX() - 360; }
         public Vector2 GetOriginPos() { return new Vector2(m_Pos.X + m_Width/2, m_Pos.Y + 23); }
         public void MoveHorizontal(int distance) { m_Pos.X += distance; }
         public void SetPos(float NewPos) { m_Pos.Y = NewPos; }
-        public void Fall() { m_Pos.Y += 30; }
+        public void Fall() { m_Pos.Y += 25; }
         public void AddRotation()
         {
             if (m_Rotation < 3)
@@ -42,17 +43,9 @@ namespace Tetris
                 m_Rotation = 0;
             }
         }
-        public Vector2 GetNextPos(int BlockNumber)
+        public virtual Vector2 GetNextPos(int BlockNumber)
         {
-            if(m_Rotation == 0 || m_Rotation == 2)
-            {
-                return new Vector2(m_Pos.X, m_Pos.Y + (float)(m_Height * BlockNumber));
-            }
-            else if (m_Rotation == 1 || m_Rotation == 3)
-            {
-                return new Vector2(m_Pos.X + (float)(m_Width * BlockNumber), m_Pos.Y);
-            }
-            else { return new Vector2(0,0); }
+            return m_Pos;
         }
         public virtual void Draw(SpriteBatch spriteBatch, Vector2 Scale, Texture2D SpriteColor)
         {
@@ -85,24 +78,6 @@ namespace Tetris
                 spriteBatch.Draw(SpriteColor, this.GetPos(), scale: Scale);
             }
         }
-        public override float GetMaxPosY()
-        {
-            if (IsShape1x4 == true)
-            {
-                if (m_Rotation == 0 || m_Rotation == 2)
-                {
-                    return (m_Pos.Y + m_Height * 4);
-                }
-                else
-                {
-                    return base.GetMaxPosY();
-                }
-            }
-            else
-            {
-                return base.GetMaxPosY();
-            }
-        }
         public override float GetMaxPosX()
         {
             if (IsShape1x4 == true)
@@ -120,6 +95,18 @@ namespace Tetris
             {
                 return base.GetMaxPosX();
             }
+        }
+        public override Vector2 GetNextPos(int BlockNumber)
+        {
+            if (m_Rotation == 0 || m_Rotation == 2)
+            {
+                return new Vector2(m_Pos.X, m_Pos.Y - (float)(m_Height * BlockNumber));
+            }
+            else if (m_Rotation == 1 || m_Rotation == 3)
+            {
+                return new Vector2(m_Pos.X + (float)(m_Width * BlockNumber), m_Pos.Y);
+            }
+            else { return new Vector2(0, 0); }
         }
     }
 }
