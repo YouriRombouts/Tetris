@@ -162,6 +162,9 @@ namespace Tetris
                 //Set grid value to the color of activeblock
                 m_ActiveBlock.GridPos = new Vector2((m_ActiveBlock.GetPosX() / m_ActiveBlock.GetWidth()), (m_ActiveBlock.GetPosY() / m_ActiveBlock.GetHeight()));
                 Grid[m_ActiveBlock.GetGridPosX(), m_ActiveBlock.GetGridPosY()] = m_ActiveBlock.GetColor();
+                Grid[m_ActiveBlock.GetGridPosX(), m_ActiveBlock.GetGridPosY()] = m_ActiveBlock.GetColor();
+                Grid[m_ActiveBlock.GetGridPosX(), m_ActiveBlock.GetGridPosY()] = m_ActiveBlock.GetColor();
+                Grid[m_ActiveBlock.GetGridPosX(), m_ActiveBlock.GetGridPosY()] = m_ActiveBlock.GetColor();
                 IsBlockActive = false;
             }
         }
