@@ -66,7 +66,7 @@ namespace Tetris
                 int o = 0;
                 for (o = 0; o < Grid.GetLength(0); o++)
                 {
-                    Grid[o, p] = "Empty";
+                    Grid[o, p] = String.Empty;
                 }
             }
             LegoBlue = Content.Load<Texture2D>("legoblue");
@@ -157,7 +157,7 @@ namespace Tetris
                 m_ActiveBlock.Fall();
             }
             //Lock block
-            else if (m_ActiveBlock.GetMaxPosY() == graphics.GraphicsDevice.Viewport.Height || Grid[m_ActiveBlock.GetGridPosX(), m_ActiveBlock.GetGridPosY() +1] == "LegoBaby")
+            else if (m_ActiveBlock.GetMaxPosY() == graphics.GraphicsDevice.Viewport.Height || Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() +1)] != String.Empty)
             {
                 //Set grid value to the color of activeblock
                 m_ActiveBlock.GridPos = new Vector2((m_ActiveBlock.GetPosX() / m_ActiveBlock.GetWidth()), (m_ActiveBlock.GetPosY() / m_ActiveBlock.GetHeight()));
@@ -185,7 +185,7 @@ namespace Tetris
                 int o = 0;
                 for (o = Grid.GetLength(0) - 1; o >= 0; o--)
                 {
-                    if (Grid[o, p] != "Empty")
+                    if (Grid[o, p] != String.Empty)
                     {
                         spriteBatch.Draw(Content.Load<Texture2D>(Grid[o, p]), new Vector2(o * 30, p * 25), scale: scale);
                     }
