@@ -157,14 +157,14 @@ namespace Tetris
                 m_ActiveBlock.Fall();
             }
             //Lock block
-            else if (m_ActiveBlock.GetMaxPosY() == graphics.GraphicsDevice.Viewport.Height)
+            else if (m_ActiveBlock.GetMaxPosY() == graphics.GraphicsDevice.Viewport.Height || Grid[m_ActiveBlock.GetGridPosX(), m_ActiveBlock.GetGridPosY() +1] == "LegoBaby")
             {
                 //Set grid value to the color of activeblock
                 m_ActiveBlock.GridPos = new Vector2((m_ActiveBlock.GetPosX() / m_ActiveBlock.GetWidth()), (m_ActiveBlock.GetPosY() / m_ActiveBlock.GetHeight()));
                 Grid[m_ActiveBlock.GetGridPosX(), m_ActiveBlock.GetGridPosY()] = m_ActiveBlock.GetColor();
-                Grid[m_ActiveBlock.GetGridPosX(), m_ActiveBlock.GetGridPosY()] = m_ActiveBlock.GetColor();
-                Grid[m_ActiveBlock.GetGridPosX(), m_ActiveBlock.GetGridPosY()] = m_ActiveBlock.GetColor();
-                Grid[m_ActiveBlock.GetGridPosX(), m_ActiveBlock.GetGridPosY()] = m_ActiveBlock.GetColor();
+                Grid[m_ActiveBlock.GetNextGridPosX(1), m_ActiveBlock.GetNextGridPosY(1)] = m_ActiveBlock.GetColor();
+                Grid[m_ActiveBlock.GetNextGridPosX(2), m_ActiveBlock.GetNextGridPosY(2)] = m_ActiveBlock.GetColor();
+                Grid[m_ActiveBlock.GetNextGridPosX(3), m_ActiveBlock.GetNextGridPosY(3)] = m_ActiveBlock.GetColor();
                 IsBlockActive = false;
             }
         }

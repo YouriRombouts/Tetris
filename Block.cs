@@ -48,9 +48,21 @@ namespace Tetris
                 m_Rotation = 0;
             }
         }
-        public virtual Vector2 GetNextPos(int BlockNumber)
+        public virtual int GetNextPosX(int BlockNumber)
         {
-            return m_Pos;
+            return (int)m_Pos.X;
+        }
+        public virtual int GetNextPosY(int BlockNumber)
+        {
+            return (int)m_Pos.Y;
+        }
+        public virtual int GetNextGridPosX(int BlockNumber)
+        {
+            return (int)GetGridPosX();
+        }
+        public virtual int GetNextGridPosY(int BlockNumber)
+        {
+            return (int)GetGridPosY();
         }
         public virtual void Draw(SpriteBatch spriteBatch, Vector2 Scale, Texture2D SpriteColor)
         {
@@ -75,9 +87,9 @@ namespace Tetris
             if (IsShape1x4 == true)
             {
                 spriteBatch.Draw(SpriteColor, GetPos(), scale: Scale);
-                spriteBatch.Draw(SpriteColor, GetNextPos(1), scale: Scale);
-                spriteBatch.Draw(SpriteColor, GetNextPos(2), scale: Scale);
-                spriteBatch.Draw(SpriteColor, GetNextPos(3), scale: Scale);
+                spriteBatch.Draw(SpriteColor, new Vector2(GetNextPosX(1), GetNextPosY(1)), scale: Scale);
+                spriteBatch.Draw(SpriteColor, new Vector2(GetNextPosX(2), GetNextPosY(2)), scale: Scale);
+                spriteBatch.Draw(SpriteColor, new Vector2(GetNextPosX(3), GetNextPosY(3)), scale: Scale);
             }
             else
             {
@@ -102,18 +114,55 @@ namespace Tetris
                 return base.GetMaxPosX();
             }
         }
-        public override Vector2 GetNextPos(int BlockNumber)
+        public override int GetNextPosX(int BlockNumber)
         {
             if (m_Rotation == 0 || m_Rotation == 2)
             {
-                return new Vector2(m_Pos.X, m_Pos.Y - (float)(m_Height * BlockNumber));
+                return (int)m_Pos.X;
             }
             else if (m_Rotation == 1 || m_Rotation == 3)
             {
-                return new Vector2(m_Pos.X + (float)(m_Width * BlockNumber), m_Pos.Y);
+                return (int)(m_Pos.X + (float)(m_Width * BlockNumber));
             }
-            else { return new Vector2(0, 0); }
+            else { return 0; }
+        }
+        public override int GetNextPosY(int BlockNumber)
+        {
+            if (m_Rotation == 0 || m_Rotation == 2)
+            {
+                return (int)(m_Pos.Y - (float)(m_Height * BlockNumber));
+            }
+            else if (m_Rotation == 1 || m_Rotation == 3)
+            {
+                return (int)m_Pos.Y;
+            }
+            else { return 0; }
+        }
+        public override int GetNextGridPosX(int BlockNumber)
+        {
+            if (m_Rotation == 0 || m_Rotation == 2)
+            {
+                return (int) GetGridPosX();
+            }
+            else if (m_Rotation == 1 || m_Rotation == 3)
+            {
+                return (int) GetGridPosX() + 1 * BlockNumber;
+            }
+            else { return 0; }
+        }
+        public override int GetNextGridPosY(int BlockNumber)
+        {
+            if (m_Rotation == 0 || m_Rotation == 2)
+            {
+                return GetGridPosY() - 1 * BlockNumber;
+            }
+            else if (m_Rotation == 1 || m_Rotation == 3)
+            {
+                return GetGridPosY();
+            }
+            else { return 0; }
         }
     }
 }
+
 
