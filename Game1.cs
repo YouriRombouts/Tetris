@@ -59,9 +59,9 @@ namespace Tetris
             aTimer.Interval = 1000;
             aTimer.Enabled = true;
 
-            Grid = new string[12,20];
+            Grid = new string[12, 20];
             int p = 0;
-            for(p = 0; p < Grid.GetLength(1); p++)
+            for (p = 0; p < Grid.GetLength(1); p++)
             {
                 int o = 0;
                 for (o = 0; o < Grid.GetLength(0); o++)
@@ -109,13 +109,13 @@ namespace Tetris
             }
             //Spawn m_ActiveBlock
             if (IsBlockActive == false)
-            {               
+            {
                 m_ActiveBlock = new Shape1x4(new Vector2(0, 0));
                 int TargetX = m_ActiveBlock.GetWidth();
                 scale = new Vector2(TargetX / (float)LegoBlue.Width, TargetX / (float)LegoBlue.Width);
                 IsBlockActive = true;
             }
-           
+
 
             //Move block horizontally
             if (currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyUp(Keys.Left))
@@ -145,7 +145,7 @@ namespace Tetris
             {
                 m_ActiveBlock.SetPosX(0);
             }
-            
+
 
             base.Update(gameTime);
         }
@@ -160,6 +160,8 @@ namespace Tetris
             else if (m_ActiveBlock.GetMaxPosY() == graphics.GraphicsDevice.Viewport.Height)
             {
                 //Set grid value to the color of activeblock
+                m_ActiveBlock.GridPos = new Vector2((m_ActiveBlock.GetPosX() / m_ActiveBlock.GetWidth()), (m_ActiveBlock.GetPosY() / m_ActiveBlock.GetHeight()));
+                Grid[m_ActiveBlock.GetGridPosX(), m_ActiveBlock.GetGridPosY()] = m_ActiveBlock.GetColor();
                 IsBlockActive = false;
             }
         }
@@ -186,7 +188,7 @@ namespace Tetris
                     }
                 }
             }
-            m_ActiveBlock.Draw(spriteBatch, scale, LegoBlue);
+            m_ActiveBlock.Draw(spriteBatch, scale, LegoBaby);
             spriteBatch.End();
 
             base.Draw(gameTime);

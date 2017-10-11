@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/Youri Rombouts/Documents/Visual Studio 2015/Projects/Tetris/Tetris/Content/legored.png</SourceFile>
-  <SourceTime>2017-10-08T18:23:16.4638891+02:00</SourceTime>
-  <DestFile>C:/Users/Youri Rombouts/Documents/Visual Studio 2015/Projects/Tetris/Tetris/Content/bin/Windows/legored.xnb</DestFile>
-  <DestTime>2017-10-08T18:55:38.4083485+02:00</DestTime>
+  <SourceFile>C:/Users/timgo/Documents/GitHub/Tetris/Content/legored.png</SourceFile>
+  <SourceTime>2017-10-06T20:16:00.3855681+02:00</SourceTime>
+  <DestFile>C:/Users/timgo/Documents/GitHub/Tetris/Content/bin/Windows/legored.xnb</DestFile>
+  <DestTime>2017-10-11T19:12:36.0775131+02:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2016-03-30T08:36:08+02:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
