@@ -110,7 +110,7 @@ namespace Tetris
             //Spawn m_ActiveBlock
             if (IsBlockActive == false)
             {
-                m_ActiveBlock = new Shape1x4(new Vector2(0, 0));
+                m_ActiveBlock = new Shape1x4(new Vector2(180, 0));
                 int TargetX = m_ActiveBlock.GetWidth();
                 scale = new Vector2(TargetX / (float)LegoBlue.Width, TargetX / (float)LegoBlue.Width);
                 IsBlockActive = true;
@@ -127,9 +127,12 @@ namespace Tetris
                 m_ActiveBlock.MoveHorizontal(m_ActiveBlock.GetWidth());
             }
             //Move block down
-            if (currentKeyboardState.IsKeyDown(Keys.Down) && previousKeyboardState.IsKeyUp(Keys.Down))
+            if (currentKeyboardState.IsKeyDown(Keys.Down) && previousKeyboardState.IsKeyUp(Keys.Down) && m_ActiveBlock.GetGridPosY() > 0)
             {
-                m_ActiveBlock.Fall();
+                if(Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] == String.Empty)
+                {
+                    m_ActiveBlock.Fall();
+                }                
             }
             //Make sure the block stays in screen vertically
             if (m_ActiveBlock.GetMaxPosY() > graphics.GraphicsDevice.Viewport.Height)
@@ -152,19 +155,19 @@ namespace Tetris
 
         private void Everysecond(object source, ElapsedEventArgs e)
         {
-            if (m_ActiveBlock.GetMaxPosY() != graphics.GraphicsDevice.Viewport.Height && m_ActiveBlock.GetMaxPosY() < graphics.GraphicsDevice.Viewport.Height)
+            if (m_ActiveBlock.GetMaxPosY() != graphics.GraphicsDevice.Viewport.Height && m_ActiveBlock.GetMaxPosY() < graphics.GraphicsDevice.Viewport.Height && Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] == String.Empty)
             {
                 m_ActiveBlock.Fall();
             }
             //Lock block
             else if (m_ActiveBlock.GetMaxPosY() == graphics.GraphicsDevice.Viewport.Height || Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() +1)] != String.Empty)
             {
-                //Set grid value to the color of activeblock
-                m_ActiveBlock.GridPos = new Vector2((m_ActiveBlock.GetPosX() / m_ActiveBlock.GetWidth()), (m_ActiveBlock.GetPosY() / m_ActiveBlock.GetHeight()));
-                Grid[m_ActiveBlock.GetGridPosX(), m_ActiveBlock.GetGridPosY()] = m_ActiveBlock.GetColor();
-                Grid[m_ActiveBlock.GetNextGridPosX(1), m_ActiveBlock.GetNextGridPosY(1)] = m_ActiveBlock.GetColor();
-                Grid[m_ActiveBlock.GetNextGridPosX(2), m_ActiveBlock.GetNextGridPosY(2)] = m_ActiveBlock.GetColor();
-                Grid[m_ActiveBlock.GetNextGridPosX(3), m_ActiveBlock.GetNextGridPosY(3)] = m_ActiveBlock.GetColor();
+                //Set grid value to the color of activeblock           
+                int i = 0;
+                for (i = 0; i < 4; i++)
+                {
+                    Grid[m_ActiveBlock.GetNextGridPosX(i), m_ActiveBlock.GetNextGridPosY(i)] = m_ActiveBlock.GetColor();
+                }
                 IsBlockActive = false;
             }
         }

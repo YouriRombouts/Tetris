@@ -15,8 +15,8 @@ namespace Tetris
         public int m_Width = 30;
         public int m_Rotation = 0;
         public string m_Color;
-        public Vector2 GridPos = new Vector2(0, 0);
         public Vector2 m_Pos = new Vector2(0, 0);
+        //public Vector2 GridPos = new Vector2(0, 0);        
         public Block(Vector2 Pos) { m_Pos = Pos; }
         public int GetHeight() { return m_Height; }
         public int GetWidth() { return m_Width; }
@@ -25,9 +25,9 @@ namespace Tetris
         public float GetPosY() { return m_Pos.Y; }
         public string GetColor() { return m_Color; }
         public void SetPosX(int NewPosX) { m_Pos.X = NewPosX; }
-        public Vector2 GetGridPos() { return GridPos; }
-        public int GetGridPosX() { return (int)GridPos.X; }
-        public int GetGridPosY() { return (int)GridPos.Y; }
+        //public Vector2 GetGridPos() { return GridPos; }
+        public int GetGridPosX() { return (int)(m_Pos.X / 30); }
+        public int GetGridPosY() { return (int)(m_Pos.Y / 25); }
         public virtual float GetMaxPosY() { return m_Pos.Y + m_Height; }
         public virtual float GetMaxPosX() { return m_Pos.X + m_Width; }
         //GBIS = Get Back In Screen
