@@ -169,6 +169,31 @@ namespace Tetris
                     Grid[m_ActiveBlock.GetNextGridPosX(i), m_ActiveBlock.GetNextGridPosY(i)] = m_ActiveBlock.GetColor();
                 }
                 IsBlockActive = false;
+                int InARow = 0;
+                int o = 0;
+                for (o = 0; o < 20; o++)
+                {
+                    int p = 0;
+                    InARow = 0;
+                    for (p = 0; p < 12; p++)
+                    {
+                        if(Grid[p,o] != string.Empty)
+                        {
+                            InARow++;
+                        }
+                        else
+                        {
+                            InARow = 0;
+                        }
+                    }
+                    if(InARow == 12)
+                    {
+                        for(p = 0; p < 12; p++)
+                        {
+                            Grid[p, o] = string.Empty;
+                        }
+                    }
+                }           
             }
         }
 
