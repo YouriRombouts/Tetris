@@ -19,7 +19,7 @@ namespace Tetris
         Vector2 scale;
         KeyboardState previousKeyboardState, currentKeyboardState;
         string[,] Grid;
-        bool IsBlockActive;
+        bool IsBlockActive, IsLocked;
 
 
         public Game1()
@@ -114,16 +114,28 @@ namespace Tetris
                 int TargetX = m_ActiveBlock.GetWidth();
                 scale = new Vector2(TargetX / (float)LegoBlue.Width, TargetX / (float)LegoBlue.Width);
                 IsBlockActive = true;
+                IsLocked = false;
+            }
+
+            if (m_ActiveBlock.GetMinPosY() < 0)
+            {
+                m_ActiveBlock.GBISYT();
             }
 
             //Move block horizontally
-            if (currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyUp(Keys.Left) && Grid[m_ActiveBlock.GetGridPosX() - 1, m_ActiveBlock.GetGridPosY()] == string.Empty)
+            if (currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyUp(Keys.Left) && m_ActiveBlock.GetGridPosX() != 0)
             {
-                m_ActiveBlock.MoveHorizontal(-m_ActiveBlock.GetWidth());
+                if (Grid[m_ActiveBlock.GetGridPosX() - 1, m_ActiveBlock.GetGridPosY()] == string.Empty)
+                {
+                    m_ActiveBlock.MoveHorizontal(-m_ActiveBlock.GetWidth());
+                }
             }
-            if (currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyUp(Keys.Right) && Grid[m_ActiveBlock.GetGridPosX() + 1, m_ActiveBlock.GetGridPosY()] == string.Empty)
+            if (currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyUp(Keys.Right) && m_ActiveBlock.GetGridPosX() != 11)
             {
-                m_ActiveBlock.MoveHorizontal(m_ActiveBlock.GetWidth());
+                if (Grid[m_ActiveBlock.GetGridPosX() + 1, m_ActiveBlock.GetGridPosY()] == string.Empty)
+                {
+                    m_ActiveBlock.MoveHorizontal(m_ActiveBlock.GetWidth());
+                }
             }
             //Move block down
             if (currentKeyboardState.IsKeyDown(Keys.Down) && previousKeyboardState.IsKeyUp(Keys.Down) && m_ActiveBlock.GetPosY() != 475)
@@ -175,17 +187,7 @@ namespace Tetris
                 }
             }
 
-            base.Update(gameTime);
-        }
-
-        private void Everysecond(object source, ElapsedEventArgs e)
-        {
-            if (m_ActiveBlock.GetMaxPosY() != graphics.GraphicsDevice.Viewport.Height && m_ActiveBlock.GetMaxPosY() < graphics.GraphicsDevice.Viewport.Height && Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] == String.Empty)
-            {
-                m_ActiveBlock.Fall();
-            }
-            //Lock block
-            else if (m_ActiveBlock.GetMaxPosY() == graphics.GraphicsDevice.Viewport.Height || Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() +1)] != String.Empty)
+            if (IsLocked == true)
             {
                 //Set grid value to the color of activeblock           
                 int i = 0;
@@ -195,25 +197,24 @@ namespace Tetris
                 }
                 IsBlockActive = false;
                 int InARow = 0;
-                int FullRow = 12;                
-                int y;
+                int FullRow = 12;
                 for (y = 0; y < 20; y++)
                 {
                     int x = 0;
                     InARow = 0;
                     for (x = 0; x < 12; x++)
                     {
-                        if(Grid[x,y] != string.Empty)
+                        if (Grid[x, y] != string.Empty)
                         {
-                            InARow++;                            
+                            InARow++;
                             if (InARow == 12)
                             {
-                                FullRow = y;                            
+                                FullRow = y;
                             }
                         }
                         else
                         {
-                            InARow = 0;                            
+                            InARow = 0;
                         }
                     }
                     if (InARow == 12)
@@ -236,10 +237,25 @@ namespace Tetris
                             {
                                 Grid[x, y + 1] = Grid[x, y];
                                 Grid[x, y] = string.Empty;
-                            }                            
-                        }                        
+                            }
+                        }
                     }
                 }
+            }
+
+            base.Update(gameTime);
+        }
+
+        private void Everysecond(object source, ElapsedEventArgs e)
+        {
+            if (m_ActiveBlock.GetMaxPosY() != graphics.GraphicsDevice.Viewport.Height && m_ActiveBlock.GetMaxPosY() < graphics.GraphicsDevice.Viewport.Height && Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] == String.Empty && Grid[m_ActiveBlock.GetNextGridPosX(1), (m_ActiveBlock.GetNextGridPosY(1) + 1)] == String.Empty && Grid[m_ActiveBlock.GetNextGridPosX(2), (m_ActiveBlock.GetNextGridPosY(2) + 1)] == String.Empty && Grid[m_ActiveBlock.GetNextGridPosX(3), (m_ActiveBlock.GetNextGridPosY(3) + 1)] == String.Empty)
+            {
+                m_ActiveBlock.Fall();
+            }
+            //Lock block
+            else
+            {
+                IsLocked = true;
             }
         }
 
