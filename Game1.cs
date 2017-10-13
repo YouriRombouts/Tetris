@@ -60,13 +60,13 @@ namespace Tetris
             aTimer.Enabled = true;
 
             Grid = new string[12, 20];
-            int p = 0;
-            for (p = 0; p < Grid.GetLength(1); p++)
+            int y = 0;
+            for (y = 0; y < 20; y++)
             {
-                int o = 0;
-                for (o = 0; o < Grid.GetLength(0); o++)
+                int x;
+                for (x = 0; x < Grid.GetLength(0); x++)
                 {
-                    Grid[o, p] = String.Empty;
+                    Grid[x, y] = String.Empty;
                 }
             }
             LegoBlue = Content.Load<Texture2D>("legoblue");
@@ -116,18 +116,17 @@ namespace Tetris
                 IsBlockActive = true;
             }
 
-
             //Move block horizontally
-            if (currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyUp(Keys.Left))
+            if (currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyUp(Keys.Left) && Grid[m_ActiveBlock.GetGridPosX() - 1, m_ActiveBlock.GetGridPosY()] == string.Empty)
             {
                 m_ActiveBlock.MoveHorizontal(-m_ActiveBlock.GetWidth());
             }
-            if (currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyUp(Keys.Right))
+            if (currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyUp(Keys.Right) && Grid[m_ActiveBlock.GetGridPosX() + 1, m_ActiveBlock.GetGridPosY()] == string.Empty)
             {
                 m_ActiveBlock.MoveHorizontal(m_ActiveBlock.GetWidth());
             }
             //Move block down
-            if (currentKeyboardState.IsKeyDown(Keys.Down) && previousKeyboardState.IsKeyUp(Keys.Down) && m_ActiveBlock.GetGridPosY() > 0)
+            if (currentKeyboardState.IsKeyDown(Keys.Down) && previousKeyboardState.IsKeyUp(Keys.Down) && m_ActiveBlock.GetPosY() != 475)
             {
                 if(Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] == String.Empty)
                 {
@@ -149,6 +148,32 @@ namespace Tetris
                 m_ActiveBlock.SetPosX(0);
             }
 
+            //Remove empty rows
+            int y;
+            for (y = 1; y < 20; y++)
+            {
+                int x;
+                int EmptyInRow = 0;
+                for (x = 0; x < 12; x++)
+                {
+                    if (Grid[x, y] == string.Empty)
+                    {
+                        EmptyInRow++;
+                        if (EmptyInRow == 12)
+                        {
+                            for (x = 0; x < 12; x++)
+                            {
+                                Grid[x, y] = Grid[x, y - 1];
+                                Grid[x, y - 1] = string.Empty;
+                            }
+                        }
+                    }
+                    else if (Grid[x, y] != string.Empty)
+                    {
+                        EmptyInRow = 0;
+                    }
+                }
+            }
 
             base.Update(gameTime);
         }
@@ -170,30 +195,51 @@ namespace Tetris
                 }
                 IsBlockActive = false;
                 int InARow = 0;
-                int o = 0;
-                for (o = 0; o < 20; o++)
+                int FullRow = 12;                
+                int y;
+                for (y = 0; y < 20; y++)
                 {
-                    int p = 0;
+                    int x = 0;
                     InARow = 0;
-                    for (p = 0; p < 12; p++)
+                    for (x = 0; x < 12; x++)
                     {
-                        if(Grid[p,o] != string.Empty)
+                        if(Grid[x,y] != string.Empty)
                         {
-                            InARow++;
+                            InARow++;                            
+                            if (InARow == 12)
+                            {
+                                FullRow = y;                            
+                            }
                         }
                         else
                         {
-                            InARow = 0;
+                            InARow = 0;                            
                         }
                     }
-                    if(InARow == 12)
+                    if (InARow == 12)
                     {
-                        for(p = 0; p < 12; p++)
+                        for (x = 0; x < 12; x++)
                         {
-                            Grid[p, o] = string.Empty;
+                            Grid[x, y] = string.Empty;
                         }
+
                     }
-                }           
+                }
+                if (InARow == 12)
+                {
+                    for (y = FullRow - 1; y >= 0; y--)
+                    {
+                        int x;
+                        for (x = 0; x < 12; x++)
+                        {
+                            if (Grid[x, y + 1] == string.Empty)
+                            {
+                                Grid[x, y + 1] = Grid[x, y];
+                                Grid[x, y] = string.Empty;
+                            }                            
+                        }                        
+                    }
+                }
             }
         }
 
