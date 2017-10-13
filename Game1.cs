@@ -138,7 +138,7 @@ namespace Tetris
                 }
             }
             //Move block down
-            if (currentKeyboardState.IsKeyDown(Keys.Down) && previousKeyboardState.IsKeyUp(Keys.Down) && m_ActiveBlock.GetPosY() != 475)
+            if (currentKeyboardState.IsKeyDown(Keys.Down) && previousKeyboardState.IsKeyUp(Keys.Down) && m_ActiveBlock.GetPosY() != 475 && IsLocked == false)
             {
                 if(Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] == String.Empty)
                 {
@@ -186,6 +186,17 @@ namespace Tetris
                     }
                 }
             }
+            if (m_ActiveBlock.GetMaxPosY() < 500)
+            {
+                if (Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(1), (m_ActiveBlock.GetNextGridPosY(1) + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(2), (m_ActiveBlock.GetNextGridPosY(2) + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(3), (m_ActiveBlock.GetNextGridPosY(3) + 1)] != String.Empty)
+                {
+                    IsLocked = true;
+                }
+            }
+            else if (m_ActiveBlock.GetMaxPosY() == 500)
+            {
+                IsLocked = true;
+            }         
 
             if (IsLocked == true)
             {
@@ -248,14 +259,9 @@ namespace Tetris
 
         private void Everysecond(object source, ElapsedEventArgs e)
         {
-            if (m_ActiveBlock.GetMaxPosY() != graphics.GraphicsDevice.Viewport.Height && m_ActiveBlock.GetMaxPosY() < graphics.GraphicsDevice.Viewport.Height && Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] == String.Empty && Grid[m_ActiveBlock.GetNextGridPosX(1), (m_ActiveBlock.GetNextGridPosY(1) + 1)] == String.Empty && Grid[m_ActiveBlock.GetNextGridPosX(2), (m_ActiveBlock.GetNextGridPosY(2) + 1)] == String.Empty && Grid[m_ActiveBlock.GetNextGridPosX(3), (m_ActiveBlock.GetNextGridPosY(3) + 1)] == String.Empty)
+            if (m_ActiveBlock.GetMaxPosY() != graphics.GraphicsDevice.Viewport.Height && m_ActiveBlock.GetMaxPosY() < graphics.GraphicsDevice.Viewport.Height)
             {
                 m_ActiveBlock.Fall();
-            }
-            //Lock block
-            else
-            {
-                IsLocked = true;
             }
         }
 
