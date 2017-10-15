@@ -110,7 +110,7 @@ namespace Tetris
             //Spawn m_ActiveBlock
             if (IsBlockActive == false)
             {
-                m_ActiveBlock = new Shape1x4(new Vector2(180, 0));
+                m_ActiveBlock = new IShape(new Vector2(180, 0));
                 int TargetX = m_ActiveBlock.GetWidth();
                 scale = new Vector2(TargetX / (float)LegoBlue.Width, TargetX / (float)LegoBlue.Width);
                 IsBlockActive = true;
@@ -287,7 +287,7 @@ namespace Tetris
                     }
                 }
             }
-            m_ActiveBlock.Draw(spriteBatch, scale, LegoBaby);
+            m_ActiveBlock.Draw(spriteBatch, scale, LegoBlue);
             spriteBatch.End();
 
             base.Draw(gameTime);
