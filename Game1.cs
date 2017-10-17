@@ -20,7 +20,33 @@ namespace Tetris
         KeyboardState previousKeyboardState, currentKeyboardState;
         string[,] Grid;
         bool IsBlockActive, IsLocked;
+        Point screen;
+        
 
+        public void SetFullScreen(bool fullscreen = true)
+        {
+            screen = new Point(1440, 1080);
+            float scalex = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / (float)screen.X;
+            float scaley = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / (float)screen.Y;
+            float finalscale = 1;
+            if (!fullscreen)
+            {
+                if (scalex < 1f || scaley < 1f)
+                    finalscale = Math.Min(scalex, scaley);
+                graphics.IsFullScreen = false;
+            }
+            else
+            {
+                finalscale = scalex;
+                if (Math.Abs(1 - scaley) < Math.Abs(1 - scalex))
+                    finalscale = scaley;
+                graphics.IsFullScreen = fullscreen;
+            }
+            graphics.PreferredBackBufferWidth = (int)(finalscale * screen.X);
+            graphics.PreferredBackBufferHeight = (int)(finalscale * screen.Y);
+            graphics.ApplyChanges();
+            scale = scale * finalscale;
+        }
 
         public Game1()
         {
@@ -37,9 +63,6 @@ namespace Tetris
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            graphics.PreferredBackBufferHeight = 500;
-            graphics.PreferredBackBufferWidth = 360;
-            graphics.ApplyChanges();
             base.Initialize();
         }
 
@@ -102,6 +125,15 @@ namespace Tetris
                 Exit();
 
             HandleInput();
+            if (currentKeyboardState.IsKeyDown(Keys.F5))
+            {
+                SetFullScreen(!graphics.IsFullScreen);
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.Escape))
+            {
+                this.Exit();
+            }
             //Rotate block
             if (currentKeyboardState.IsKeyDown(Keys.Up) && previousKeyboardState.IsKeyUp(Keys.Up))
             {
@@ -112,7 +144,10 @@ namespace Tetris
             {
                 m_ActiveBlock = new IShape(new Vector2(180, 0));
                 int TargetX = m_ActiveBlock.GetWidth();
-                scale = new Vector2(TargetX / (float)LegoBlue.Width, TargetX / (float)LegoBlue.Width);
+                if (graphics.IsFullScreen != true)
+                {
+                    scale = new Vector2(TargetX / (float)LegoBlue.Width, TargetX / (float)LegoBlue.Width);
+                }
                 IsBlockActive = true;
                 IsLocked = false;
             }
@@ -274,7 +309,7 @@ namespace Tetris
             GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin();
+            spriteBatch.Begin(/*SpriteSortMode.Deferred, null, null, null, null, null, spriteScale*/);
             int p = 0;
             for (p = Grid.GetLength(1) - 1; p >= 0; p--)
             {
