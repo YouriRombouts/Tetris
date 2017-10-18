@@ -22,7 +22,8 @@ namespace Tetris
         bool IsBlockActive, IsLocked;
         Point screen;
         int TargetX;
-        
+        float TwoTenthSecond;
+
 
         public void SetFullScreen(bool fullscreen = true)
         {
@@ -85,6 +86,8 @@ namespace Tetris
             aTimer.Interval = 1000;
             aTimer.Enabled = true;
 
+            TwoTenthSecond = 0.2f;
+
             Grid = new string[12, 20];
             int y = 0;
             for (y = 0; y < 20; y++)
@@ -124,6 +127,8 @@ namespace Tetris
         protected override void Update(GameTime gameTime)
         {
             // TODO: Add your update logic here
+            TwoTenthSecond -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
@@ -136,12 +141,7 @@ namespace Tetris
             if (currentKeyboardState.IsKeyDown(Keys.Escape))
             {
                 this.Exit();
-            }
-            //Rotate block
-            if (currentKeyboardState.IsKeyDown(Keys.Up) && previousKeyboardState.IsKeyUp(Keys.Up))
-            {
-                m_ActiveBlock.AddRotation();
-            }
+            }            
             //Spawn m_ActiveBlock
             if (IsBlockActive == false)
             {
@@ -151,40 +151,62 @@ namespace Tetris
                 IsBlockActive = true;
                 IsLocked = false;
             }
-
-            if (m_ActiveBlock.GetMinPosY() < 0)
+            //Rotate block
+            if (currentKeyboardState.IsKeyDown(Keys.Up) && previousKeyboardState.IsKeyUp(Keys.Up))
             {
-                m_ActiveBlock.GBISYT();
+                if(m_ActiveBlock.GetMaxPosX() == 360)
+                {
+                    m_ActiveBlock.AddRotation();
+                    m_ActiveBlock.GBISX();
+                }
+                else
+                {
+                    try
+                    {
+                        int i;
+                        int OpenBlocks = 0;
+                        for (i = 0; i < 4; i++)
+                        {
+                            if (Grid[(int)m_ActiveBlock.GetRotatedGridPos(i).X, (int)m_ActiveBlock.GetRotatedGridPos(i).Y] == string.Empty)
+                            {
+                                OpenBlocks++;
+                            }
+                        }
+                        if (OpenBlocks == 4)
+                        {
+                            m_ActiveBlock.AddRotation();
+                        }
+                    }
+                    catch (IndexOutOfRangeException) { };
+                }                                    
             }
 
             //Move block horizontally
-            if (currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyUp(Keys.Left) && m_ActiveBlock.GetGridPosX() != 0)
+            if ((currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyUp(Keys.Left) || (currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyDown(Keys.Left) && TwoTenthSecond < 0)) && m_ActiveBlock.GetGridPosX() != 0)
             {
+                TwoTenthSecond = 0.2f;
                 if (Grid[m_ActiveBlock.GetGridPosX() - 1, m_ActiveBlock.GetGridPosY()] == string.Empty)
                 {
                     m_ActiveBlock.MoveHorizontal(-m_ActiveBlock.GetWidth());
                 }
             }
-            if (currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyUp(Keys.Right) && m_ActiveBlock.GetGridPosX() != 11)
+            if ((currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyUp(Keys.Right) || (currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyDown(Keys.Right) && TwoTenthSecond < 0)) && m_ActiveBlock.GetGridPosX() != 11)
             {
+                TwoTenthSecond = 0.2f;
                 if (Grid[m_ActiveBlock.GetGridPosX() + 1, m_ActiveBlock.GetGridPosY()] == string.Empty)
                 {
                     m_ActiveBlock.MoveHorizontal(m_ActiveBlock.GetWidth());
                 }
             }
             //Move block down
-            if (currentKeyboardState.IsKeyDown(Keys.Down) && previousKeyboardState.IsKeyUp(Keys.Down) && m_ActiveBlock.GetPosY() != 475 && IsLocked == false)
+            if ((currentKeyboardState.IsKeyDown(Keys.Down) && previousKeyboardState.IsKeyUp(Keys.Down) || (currentKeyboardState.IsKeyDown(Keys.Down) && previousKeyboardState.IsKeyDown(Keys.Down) && TwoTenthSecond < 0)) && m_ActiveBlock.GetPosY() != 475 && IsLocked == false)
             {
-                if(Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] == String.Empty)
+                TwoTenthSecond = 0.2f;
+                if (Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] == String.Empty)
                 {
                     m_ActiveBlock.Fall();
-                }                
-            }
-            //Make sure the block stays in screen vertically
-            if (m_ActiveBlock.GetMaxPosY() > graphics.GraphicsDevice.Viewport.Height)
-            {
-                m_ActiveBlock.GBISY();
-            }
+                }
+            }              
             //Make sure the block stays in screen horizontally
             if (m_ActiveBlock.GetMaxPosX() > graphics.GraphicsDevice.Viewport.Width)
             {
@@ -223,10 +245,14 @@ namespace Tetris
             }
             if (m_ActiveBlock.GetMaxPosY() < 500)
             {
-                if (Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(1), (m_ActiveBlock.GetNextGridPosY(1) + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(2), (m_ActiveBlock.GetNextGridPosY(2) + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(3), (m_ActiveBlock.GetNextGridPosY(3) + 1)] != String.Empty)
+                try
                 {
-                    IsLocked = true;
+                    if (Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(1, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(1, m_ActiveBlock.GetRotation()) + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(2, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(2, m_ActiveBlock.GetRotation()) + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(3, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(3, m_ActiveBlock.GetRotation()) + 1)] != String.Empty)
+                    {
+                        IsLocked = true;
+                    }
                 }
+                catch (IndexOutOfRangeException) { };
             }
             else if (m_ActiveBlock.GetMaxPosY() == 500)
             {
@@ -239,7 +265,7 @@ namespace Tetris
                 int i = 0;
                 for (i = 0; i < 4; i++)
                 {
-                    Grid[m_ActiveBlock.GetNextGridPosX(i), m_ActiveBlock.GetNextGridPosY(i)] = m_ActiveBlock.GetColor();
+                    Grid[m_ActiveBlock.GetNextGridPosX(i, m_ActiveBlock.GetRotation()), m_ActiveBlock.GetNextGridPosY(i, m_ActiveBlock.GetRotation())] = m_ActiveBlock.GetColor();
                 }
                 IsBlockActive = false;
                 int InARow = 0;
@@ -294,10 +320,14 @@ namespace Tetris
 
         private void Everysecond(object source, ElapsedEventArgs e)
         {
-            if (m_ActiveBlock.GetMaxPosY() != graphics.GraphicsDevice.Viewport.Height && m_ActiveBlock.GetMaxPosY() < graphics.GraphicsDevice.Viewport.Height)
+            try
             {
-                m_ActiveBlock.Fall();
+                if (m_ActiveBlock.GetMaxPosY() != graphics.GraphicsDevice.Viewport.Height && m_ActiveBlock.GetMaxPosY() < graphics.GraphicsDevice.Viewport.Height && currentKeyboardState.IsKeyUp(Keys.Down))
+                {
+                    m_ActiveBlock.Fall();
+                }
             }
+            catch (IndexOutOfRangeException) { };
         }
 
         /// <summary>
