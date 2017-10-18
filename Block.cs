@@ -174,7 +174,7 @@ namespace Tetris
             }
         }
     }
-    /*class LShape : Block
+    class LShape : Block
     {
         public LShape(Vector2 Pos) : base(Pos) {}
         bool IsLShape = true;
@@ -217,7 +217,7 @@ namespace Tetris
         }
         public override int GetNextPosX(int BlockNumber)
         {
-            if (m_Rotation == 0 || m_Rotation == 2)
+            if (m_Rotation == 0)
             {
                 if (BlockNumber < 3)
                 {
@@ -241,6 +241,18 @@ namespace Tetris
                 }
 
             }
+            if (m_Rotation == 2)
+            {
+                if (BlockNumber < 3)
+                {
+                    return (int)(m_Pos.X * -BlockNumber);
+                }
+                else
+                {
+                    return (int)m_Pos.X * -(BlockNumber - 1);
+                }
+
+            }
             else
             {
                 if (BlockNumber < 2)
@@ -256,13 +268,27 @@ namespace Tetris
         }
         public override int GetNextPosY(int BlockNumber)
         {
-            if (m_Rotation == 1 || m_Rotation == 3)
+            if (m_Rotation == 0)
             {
-                return (int)(m_Pos.Y - (float)(m_Height * BlockNumber));
+                if (BlockNumber > 3)
+                {
+                    return (int)(m_Pos.Y - (float)(m_Height));
+                }
+                else
+                {
+                    return (int)m_Pos.Y;
+                }
             }
-            else if (m_Rotation == 0 || m_Rotation == 2)
+            else if (m_Rotation == 1)
             {
-                return (int)m_Pos.Y;
+                if (BlockNumber < 2)
+                {
+                    return (int)m_Pos.Y;
+                }
+                else
+                {
+                    return (int)(m_Pos.Y * (BlockNumber - 2));
+                }
             }
             else { return 0; }
         }
@@ -301,7 +327,7 @@ namespace Tetris
                 return base.GetMinPosY();
             }
         }
-    }*/
+    }
 }
 
 
