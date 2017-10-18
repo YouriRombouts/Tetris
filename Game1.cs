@@ -15,7 +15,7 @@ namespace Tetris
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Block m_ActiveBlock;
-        Texture2D LegoBlue, LegoBaby;
+        Texture2D LegoBlue, LegoBaby ,LegoPurple , ActiveColor;
         Vector2 scale;
         KeyboardState previousKeyboardState, currentKeyboardState;
         string[,] Grid;
@@ -100,6 +100,7 @@ namespace Tetris
             }
             LegoBlue = Content.Load<Texture2D>("legoblue");
             LegoBaby = Content.Load<Texture2D>("legobaby");
+            LegoPurple = Content.Load<Texture2D>("legopurple");
             // TODO: use this.Content to load your game content here
         }
 
@@ -145,9 +146,10 @@ namespace Tetris
             //Spawn m_ActiveBlock
             if (IsBlockActive == false)
             {
-                m_ActiveBlock = new IShape(new Vector2(180, 0));
+                m_ActiveBlock = new SShape(new Vector2(180, 0));
                 int TargetX = m_ActiveBlock.GetWidth();
                 scale = new Vector2(TargetX / (float)LegoBlue.Width, TargetX / (float)LegoBlue.Width);
+                ActiveColor = Content.Load<Texture2D>(m_ActiveBlock.GetColor());
                 IsBlockActive = true;
                 IsLocked = false;
             }
@@ -212,9 +214,9 @@ namespace Tetris
             {
                 m_ActiveBlock.GBISX();
             }
-            else if (m_ActiveBlock.GetPosX() < 0)
+            else if (m_ActiveBlock.GetMinPosX() < 0)
             {
-                m_ActiveBlock.SetPosX(0);
+                m_ActiveBlock.SetPosX((int)-m_ActiveBlock.GetMinPosX());
             }
 
             //Remove empty rows
@@ -352,7 +354,7 @@ namespace Tetris
                     }
                 }
             }
-            m_ActiveBlock.Draw(spriteBatch, scale, LegoBlue);
+            m_ActiveBlock.Draw(spriteBatch, scale, ActiveColor);
             spriteBatch.End();
 
             base.Draw(gameTime);
