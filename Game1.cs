@@ -21,11 +21,12 @@ namespace Tetris
         string[,] Grid;
         bool IsBlockActive, IsLocked;
         Point screen;
+        int TargetX;
         
 
         public void SetFullScreen(bool fullscreen = true)
         {
-            screen = new Point(1440, 1080);
+            screen = new Point(360, 500);
             float scalex = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / (float)screen.X;
             float scaley = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / (float)screen.Y;
             float finalscale = 1;
@@ -45,7 +46,6 @@ namespace Tetris
             graphics.PreferredBackBufferWidth = (int)(finalscale * screen.X);
             graphics.PreferredBackBufferHeight = (int)(finalscale * screen.Y);
             graphics.ApplyChanges();
-            scale = scale * finalscale;
         }
 
         public Game1()
@@ -144,10 +144,7 @@ namespace Tetris
             {
                 m_ActiveBlock = new IShape(new Vector2(180, 0));
                 int TargetX = m_ActiveBlock.GetWidth();
-                if (graphics.IsFullScreen != true)
-                {
-                    scale = new Vector2(TargetX / (float)LegoBlue.Width, TargetX / (float)LegoBlue.Width);
-                }
+                scale = new Vector2(TargetX / (float)LegoBlue.Width, TargetX / (float)LegoBlue.Width);
                 IsBlockActive = true;
                 IsLocked = false;
             }
