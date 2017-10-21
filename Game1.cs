@@ -162,7 +162,7 @@ namespace Tetris
             //Spawn m_ActiveBlock
             if (IsBlockActive == false)
             {
-                m_ActiveBlock = new IShape(new Vector2(180, 0));
+                m_ActiveBlock = new OShape(new Vector2(180, 0));
                 int TargetX = m_ActiveBlock.GetWidth();
                 scale = new Vector2(TargetX / (float)LegoBlue.Width, TargetX / (float)LegoBlue.Width);
                 ActiveColor = Content.Load<Texture2D>(m_ActiveBlock.GetColor());

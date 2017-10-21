@@ -699,6 +699,99 @@ namespace Tetris
             else { return 0; }
         }
     }
+    class OShape : Block
+    {
+        public OShape(Vector2 Pos) : base(Pos) { }
+        bool IsOShape = true;
+        public override void Draw(SpriteBatch spriteBatch, Vector2 Scale, Texture2D SpriteColor)
+        {
+            m_Color = "Legoyellow";
+            if (IsOShape == true)
+            {
+                spriteBatch.Draw(SpriteColor, new Vector2(GetNextPosX(0), GetNextPosY(0)), scale: Scale);
+                spriteBatch.Draw(SpriteColor, new Vector2(GetNextPosX(1), GetNextPosY(1)), scale: Scale);
+                spriteBatch.Draw(SpriteColor, new Vector2(GetNextPosX(2), GetNextPosY(2)), scale: Scale);
+                spriteBatch.Draw(SpriteColor, new Vector2(GetNextPosX(3), GetNextPosY(3)), scale: Scale);
+            }
+            else
+            {
+                spriteBatch.Draw(SpriteColor, this.GetPos(), scale: Scale);
+            }
+        }
+        public override string GetColor() { return "legoyellow"; }
+        public override float GetMaxPosX()
+        {
+            if (IsOShape == true)
+            {
+                return m_Pos.X + GetWidth() * 2;
+            }
+            else
+            {
+                return m_Pos.X;
+            }
+        }
+        public override int GetNextPosX(int BlockNumber)
+        {
+            if (BlockNumber < 2)
+            {
+                return (int)m_Pos.X;
+            }
+            else
+            {
+                return (int)m_Pos.X + GetWidth();
+            }
+        }
+        public override int GetNextPosY(int BlockNumber)
+        {
+            if (BlockNumber == 1 || BlockNumber == 3)
+            {
+                return (int)m_Pos.Y - GetHeight();
+            }
+            else if (BlockNumber == 2 || BlockNumber == 0)
+            {
+                return (int)m_Pos.Y;
+            }
+            else return 0;
+        }
+        public override int GetNextGridPosX(int BlockNumber, int Rotation)
+        {
+            if (BlockNumber < 2)
+            {
+                return (int)GetGridPosX();
+            }
+            else
+            {
+                return (int)GetGridPosX() + 1;
+            }
+        }
+        public override int GetNextGridPosY(int BlockNumber, int Rotation)
+        {
+            if (BlockNumber == 1 || BlockNumber == 3)
+            {
+                return GetGridPosY() + 1;
+            }
+            else
+            {
+                return GetGridPosY();
+            }
+        }
+        /*public override Vector2 GetRRotatedGridPos(int BlockNumber)
+        {
+            return (new Vector2(GetNextGridPosX(BlockNumber, m_Rotation + 1), GetNextGridPosY(BlockNumber, m_Rotation + 1)));
+        }
+        public override Vector2 GetLRotatedGridPos(int BlockNumber)
+        {
+            return (new Vector2(GetNextGridPosX(BlockNumber, m_Rotation - 1), GetNextGridPosY(BlockNumber, m_Rotation - 1)));
+        }*/
+        public override float GetMinPosY()
+        {
+            return m_Pos.Y - GetHeight();
+        }
+        public override float GetMaxPosY()
+        {
+            return m_Pos.Y + GetHeight() *2;
+        }
+    }
 }
 
 
