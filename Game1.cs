@@ -14,6 +14,7 @@ namespace Tetris
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        SpriteFont Font;
         Block m_ActiveBlock;
         Texture2D LegoBlue, LegoBaby ,LegoPurple , ActiveColor;
         Vector2 scale;
@@ -23,6 +24,7 @@ namespace Tetris
         Point screen;
         int /*TargetX,*/ Score;
         float TwoTenthSecond;
+        string DrawScore;
 
         enum Gamestate
         {
@@ -90,6 +92,8 @@ namespace Tetris
 
             IsBlockActive = false;
 
+            Score = 0;
+
             System.Timers.Timer aTimer = new System.Timers.Timer();
             aTimer.Elapsed += new ElapsedEventHandler(Everysecond);
             aTimer.Interval = 1000;
@@ -107,6 +111,7 @@ namespace Tetris
                     Grid[x, y] = String.Empty;
                 }
             }
+            Font = Content.Load<SpriteFont>("Score");
             LegoBlue = Content.Load<Texture2D>("legoblue");
             LegoBaby = Content.Load<Texture2D>("legobaby");
             LegoPurple = Content.Load<Texture2D>("legopurple");
@@ -136,6 +141,8 @@ namespace Tetris
 
         protected override void Update(GameTime gameTime)
         {
+            //Score
+            DrawScore = Score.ToString();            
             // TODO: Add your update logic here
             TwoTenthSecond -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -297,7 +304,7 @@ namespace Tetris
                                 if (InARow == 12)
                                 {
                                     FullRow = y;
-                                    Score++;
+                                    Score += 100;
                                 }
                             }
                             else
@@ -334,7 +341,7 @@ namespace Tetris
                     }
                 }
                 catch (IndexOutOfRangeException) { /*CurrentGamestate = GameOver*/ };
-            }
+            }            
 
             base.Update(gameTime);
         }
@@ -374,6 +381,8 @@ namespace Tetris
                 }
             }
             m_ActiveBlock.Draw(spriteBatch, scale, ActiveColor);
+            Vector2 StringLength = Font.MeasureString(DrawScore);
+            spriteBatch.DrawString(Font, DrawScore, new Vector2(graphics.GraphicsDevice.Viewport.Width - StringLength.X, 0), Color.White);
             spriteBatch.End();
 
             base.Draw(gameTime);

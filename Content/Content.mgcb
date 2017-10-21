@@ -97,3 +97,9 @@
 /processorParam:TextureFormat=Color
 /build:legoyellow.png
 
+#begin Score.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Score.spritefont
+
