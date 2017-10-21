@@ -142,7 +142,7 @@ namespace Tetris
         protected override void Update(GameTime gameTime)
         {
             //Score
-            DrawScore = Score.ToString();            
+            DrawScore = Score.ToString();
             // TODO: Add your update logic here
             TwoTenthSecond -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -158,7 +158,7 @@ namespace Tetris
             if (currentKeyboardState.IsKeyDown(Keys.Escape))
             {
                 this.Exit();
-            }            
+            }
             //Spawn m_ActiveBlock
             if (IsBlockActive == false)
             {
@@ -170,35 +170,46 @@ namespace Tetris
                 IsLocked = false;
             }
             //Rotate block
-            if (currentKeyboardState.IsKeyDown(Keys.Up) && previousKeyboardState.IsKeyUp(Keys.Up))
+            if (currentKeyboardState.IsKeyDown(Keys.A) && previousKeyboardState.IsKeyUp(Keys.A))
             {
-                if(m_ActiveBlock.GetMaxPosX() == 360)
+                try
                 {
-                    m_ActiveBlock.AddRotation();
-                    m_ActiveBlock.GBISX();
-                }
-                else
-                {
-                    try
+                    int i;
+                    int OpenBlocks = 0;
+                    for (i = 0; i < 4; i++)
                     {
-                        int i;
-                        int OpenBlocks = 0;
-                        for (i = 0; i < 4; i++)
+                        if (Grid[(int)m_ActiveBlock.GetRRotatedGridPos(i).X, (int)m_ActiveBlock.GetRRotatedGridPos(i).Y] == string.Empty)
                         {
-                            if (Grid[(int)m_ActiveBlock.GetRotatedGridPos(i).X, (int)m_ActiveBlock.GetRotatedGridPos(i).Y] == string.Empty)
-                            {
-                                OpenBlocks++;
-                            }
-                        }
-                        if (OpenBlocks == 4)
-                        {
-                            m_ActiveBlock.AddRotation();
+                            OpenBlocks++;
                         }
                     }
-                    catch (IndexOutOfRangeException) { };
-                }                                    
+                    if (OpenBlocks == 4)
+                    {
+                        m_ActiveBlock.AddRotation();
+                    }
+                }
+                catch (IndexOutOfRangeException) { };
             }
-
+            if (currentKeyboardState.IsKeyDown(Keys.D) && previousKeyboardState.IsKeyUp(Keys.D))
+            {
+                try
+                {
+                    int i;
+                    int OpenBlocks = 0;
+                    for (i = 0; i < 4; i++)
+                    {
+                        if (Grid[(int)m_ActiveBlock.GetLRotatedGridPos(i).X, (int)m_ActiveBlock.GetLRotatedGridPos(i).Y] == string.Empty)
+                        {
+                            OpenBlocks++;
+                        }
+                    }
+                    if (OpenBlocks == 4)
+                    {
+                        m_ActiveBlock.SubRotation();
+                    }
+                }
+                catch (IndexOutOfRangeException) { };
+            }
             //Move block horizontally
             //left
             if ((currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyUp(Keys.Left) || (currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyDown(Keys.Left) && TwoTenthSecond < 0)) && m_ActiveBlock.GetGridPosX() != 0)
@@ -226,7 +237,17 @@ namespace Tetris
                 {
                     m_ActiveBlock.Fall();
                 }
-            }              
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.Up))
+            {
+                while ( m_ActiveBlock.GetMaxPosY() != 500)
+                {
+                    while(Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] == String.Empty)
+                    {
+                        m_ActiveBlock.Fall();
+                    }                   
+                }
+            }
             //Make sure the block stays in screen horizontally
             if (m_ActiveBlock.GetMaxPosX() > graphics.GraphicsDevice.Viewport.Width)
             {
