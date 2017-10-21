@@ -21,9 +21,18 @@ namespace Tetris
         string[,] Grid;
         bool IsBlockActive, IsLocked;
         Point screen;
-        int TargetX, Score;
+        int /*TargetX,*/ Score;
         float TwoTenthSecond;
 
+        enum Gamestate
+        {
+            MainMenu,
+            //Options,
+            Playing,
+            GameOver,
+        }
+
+        Gamestate CurrentGameState = Gamestate.MainMenu;
 
         public void SetFullScreen(bool fullscreen = true)
         {
@@ -266,59 +275,65 @@ namespace Tetris
             if (IsLocked == true)
             {
                 //Set grid value to the color of activeblock           
-                int i = 0;
-                for (i = 0; i < 4; i++)
+                try
                 {
-                    Grid[m_ActiveBlock.GetNextGridPosX(i, m_ActiveBlock.GetRotation()), m_ActiveBlock.GetNextGridPosY(i, m_ActiveBlock.GetRotation())] = m_ActiveBlock.GetColor();
-                }
-                IsBlockActive = false;
-                int InARow = 0;
-                int FullRow = 12;
-                for (y = 0; y < 20; y++)
-                {
-                    int x = 0;
-                    InARow = 0;
-                    for (x = 0; x < 12; x++)
+                    int i = 0;
+                    for (i = 0; i < 4; i++)
                     {
-                        if (Grid[x, y] != string.Empty)
+                        Grid[m_ActiveBlock.GetNextGridPosX(i, m_ActiveBlock.GetRotation()), m_ActiveBlock.GetNextGridPosY(i, m_ActiveBlock.GetRotation())] = m_ActiveBlock.GetColor();
+                    }
+                    IsBlockActive = false;
+                    int InARow = 0;
+                    int FullRow = 12;
+                    for (y = 0; y < 20; y++)
+                    {
+                        int x = 0;
+                        InARow = 0;
+                        for (x = 0; x < 12; x++)
                         {
-                            InARow++;
-                            if (InARow == 12)
+                            if (Grid[x, y] != string.Empty)
                             {
-                                FullRow = y;
-                                Score++;
+                                InARow++;
+                                if (InARow == 12)
+                                {
+                                    FullRow = y;
+                                    Score++;
+                                }
+                            }
+                            else
+                            {
+                                InARow = 0;
                             }
                         }
-                        else
+                        if (InARow == 12)
                         {
-                            InARow = 0;
+                            for (x = 0; x < 12; x++)
+                            {
+                                Grid[x, y] = string.Empty;
+                            }
+
                         }
                     }
+
+
+                    //Empty full rows and move rows down
                     if (InARow == 12)
                     {
-                        for (x = 0; x < 12; x++)
+                        for (y = FullRow - 1; y >= 0; y--)
                         {
-                            Grid[x, y] = string.Empty;
-                        }
-
-                    }
-                }
-                //Empty full rows and move rows down
-                if (InARow == 12)
-                {        
-                    for (y = FullRow - 1; y >= 0; y--)
-                    {
-                        int x;
-                        for (x = 0; x < 12; x++)
-                        {
-                            if (Grid[x, y + 1] == string.Empty)
+                            int x;
+                            for (x = 0; x < 12; x++)
                             {
-                                Grid[x, y + 1] = Grid[x, y];
-                                Grid[x, y] = string.Empty;                               
+                                if (Grid[x, y + 1] == string.Empty)
+                                {
+                                    Grid[x, y + 1] = Grid[x, y];
+                                    Grid[x, y] = string.Empty;
+                                }
                             }
                         }
                     }
                 }
+                catch (IndexOutOfRangeException) { /*CurrentGamestate = GameOver*/ };
             }
 
             base.Update(gameTime);
