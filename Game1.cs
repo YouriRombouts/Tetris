@@ -21,7 +21,7 @@ namespace Tetris
         string[,] Grid;
         bool IsBlockActive, IsLocked;
         Point screen;
-        int TargetX;
+        int TargetX, Score;
         float TwoTenthSecond;
 
 
@@ -132,7 +132,7 @@ namespace Tetris
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
+            //Handle the keyboard input
             HandleInput();
             if (currentKeyboardState.IsKeyDown(Keys.F5))
             {
@@ -146,7 +146,7 @@ namespace Tetris
             //Spawn m_ActiveBlock
             if (IsBlockActive == false)
             {
-                m_ActiveBlock = new SShape(new Vector2(180, 0));
+                m_ActiveBlock = new IShape(new Vector2(180, 0));
                 int TargetX = m_ActiveBlock.GetWidth();
                 scale = new Vector2(TargetX / (float)LegoBlue.Width, TargetX / (float)LegoBlue.Width);
                 ActiveColor = Content.Load<Texture2D>(m_ActiveBlock.GetColor());
@@ -184,6 +184,7 @@ namespace Tetris
             }
 
             //Move block horizontally
+            //left
             if ((currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyUp(Keys.Left) || (currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyDown(Keys.Left) && TwoTenthSecond < 0)) && m_ActiveBlock.GetGridPosX() != 0)
             {
                 TwoTenthSecond = 0.2f;
@@ -192,6 +193,7 @@ namespace Tetris
                     m_ActiveBlock.MoveHorizontal(-m_ActiveBlock.GetWidth());
                 }
             }
+            //right
             if ((currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyUp(Keys.Right) || (currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyDown(Keys.Right) && TwoTenthSecond < 0)) && m_ActiveBlock.GetGridPosX() != 11)
             {
                 TwoTenthSecond = 0.2f;
@@ -284,6 +286,7 @@ namespace Tetris
                             if (InARow == 12)
                             {
                                 FullRow = y;
+                                Score++;
                             }
                         }
                         else
@@ -300,8 +303,9 @@ namespace Tetris
 
                     }
                 }
+                //Empty full rows and move rows down
                 if (InARow == 12)
-                {
+                {        
                     for (y = FullRow - 1; y >= 0; y--)
                     {
                         int x;
@@ -310,7 +314,7 @@ namespace Tetris
                             if (Grid[x, y + 1] == string.Empty)
                             {
                                 Grid[x, y + 1] = Grid[x, y];
-                                Grid[x, y] = string.Empty;
+                                Grid[x, y] = string.Empty;                               
                             }
                         }
                     }
