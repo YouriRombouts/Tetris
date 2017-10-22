@@ -96,3 +96,4 @@ C:\Users\YourionY\Documents\GitHub\Tetris\bin\Windows\x86\Debug\SharpDX.Direct3D
 C:\Users\YourionY\Documents\GitHub\Tetris\obj\x86\Debug\Tetris.csprojResolveAssemblyReference.cache
 C:\Users\YourionY\Documents\GitHub\Tetris\bin\Windows\x86\Debug\Content\Score.xnb
 C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\Content\Score.xnb
+C:\Users\YourionY\Documents\GitHub\Tetris\bin\Windows\x86\Debug\Content\SideMenu.xnb

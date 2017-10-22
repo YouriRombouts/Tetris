@@ -111,17 +111,12 @@ namespace Tetris
                     Grid[x, y] = String.Empty;
                 }
             }
-            //Load side menu
-            SideMenu = new Texture2D(graphics.GraphicsDevice, 200, 500);
-            //Load color
-            Color[] data = new Color[80 * 30];
-            for (int i = 0; i < data.Length; ++i) data[i] = Color.Chocolate;
-            SideMenu.SetData(data);
             //Load content
             Font = Content.Load<SpriteFont>("Score");
             LegoBlue = Content.Load<Texture2D>("legoblue");
             LegoBaby = Content.Load<Texture2D>("legobaby");
             LegoPurple = Content.Load<Texture2D>("legopurple");
+            SideMenu = Content.Load<Texture2D>("SideMenu");
             // TODO: use this.Content to load your game content here
         }
 
@@ -405,7 +400,7 @@ namespace Tetris
             m_ActiveBlock.Draw(spriteBatch, scale, ActiveColor);
             Vector2 StringLength = Font.MeasureString(DrawScore);
             spriteBatch.DrawString(Font, DrawScore, new Vector2(graphics.GraphicsDevice.Viewport.Width - StringLength.X, 0), Color.White);
-            spriteBatch.Draw(SideMenu, new Vector2(360, 0), Color.White);
+            spriteBatch.Draw(SideMenu, new Vector2(360, 0));
             spriteBatch.End();
 
             base.Draw(gameTime);
