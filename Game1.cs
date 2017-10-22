@@ -16,7 +16,7 @@ namespace Tetris
         SpriteBatch spriteBatch;
         SpriteFont Font;
         Block m_ActiveBlock;
-        Texture2D LegoBlue, LegoBaby ,LegoPurple , ActiveColor;
+        Texture2D LegoBlue, LegoBaby ,LegoPurple , ActiveColor, SideMenu;
         Vector2 scale;
         KeyboardState previousKeyboardState, currentKeyboardState;
         string[,] Grid;
@@ -89,18 +89,18 @@ namespace Tetris
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            
             IsBlockActive = false;
-
+            //initialize score
             Score = 0;
-
+            //start timer
             System.Timers.Timer aTimer = new System.Timers.Timer();
             aTimer.Elapsed += new ElapsedEventHandler(Everysecond);
             aTimer.Interval = 1000;
             aTimer.Enabled = true;
-
+            //0.2 second timer
             TwoTenthSecond = 0.2f;
-
+            //Initialize and fill grid
             Grid = new string[12, 20];
             int y = 0;
             for (y = 0; y < 20; y++)
@@ -111,6 +111,13 @@ namespace Tetris
                     Grid[x, y] = String.Empty;
                 }
             }
+            //Load side menu
+            SideMenu = new Texture2D(graphics.GraphicsDevice, 200, 500);
+            //Load color
+            Color[] data = new Color[80 * 30];
+            for (int i = 0; i < data.Length; ++i) data[i] = Color.Chocolate;
+            SideMenu.SetData(data);
+            //Load content
             Font = Content.Load<SpriteFont>("Score");
             LegoBlue = Content.Load<Texture2D>("legoblue");
             LegoBaby = Content.Load<Texture2D>("legobaby");
@@ -382,7 +389,7 @@ namespace Tetris
             GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin(/*SpriteSortMode.Deferred, null, null, null, null, null, spriteScale*/);
+            spriteBatch.Begin(/*SpriteSortMode.Deferred, null, null, null, null, null, spriteScale*/);            
             int p = 0;
             for (p = Grid.GetLength(1) - 1; p >= 0; p--)
             {
@@ -398,6 +405,7 @@ namespace Tetris
             m_ActiveBlock.Draw(spriteBatch, scale, ActiveColor);
             Vector2 StringLength = Font.MeasureString(DrawScore);
             spriteBatch.DrawString(Font, DrawScore, new Vector2(graphics.GraphicsDevice.Viewport.Width - StringLength.X, 0), Color.White);
+            spriteBatch.Draw(SideMenu, new Vector2(360, 0), Color.White);
             spriteBatch.End();
 
             base.Draw(gameTime);
