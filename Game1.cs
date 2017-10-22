@@ -158,6 +158,7 @@ namespace Tetris
                     CurrentGameState = "MainMenu";
                     Score = 0;
                     BlocksSet = 0;
+                    IsLocked = false;
                     int y;
                     for(y = 0; y < 20; y++)
                     {
@@ -408,7 +409,7 @@ namespace Tetris
                     {
                         if ((Second < 0) && (Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(1, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(1, m_ActiveBlock.GetRotation()) + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(2, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(2, m_ActiveBlock.GetRotation()) + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(3, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(3, m_ActiveBlock.GetRotation()) + 1)] != String.Empty))
                         {
-                            if(m_ActiveBlock.GetMinPosY() < 0 || Grid[7,0] != String.Empty)
+                            if(m_ActiveBlock.GetMinPosY() < 0 || Grid[6,0] != String.Empty)
                             {
                                 CurrentGameState = "GameOver";
                             }
