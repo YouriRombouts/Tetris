@@ -98,3 +98,5 @@ C:\Users\YourionY\Documents\GitHub\Tetris\bin\Windows\x86\Debug\Content\Score.xn
 C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\Content\Score.xnb
 C:\Users\YourionY\Documents\GitHub\Tetris\bin\Windows\x86\Debug\Content\SideMenu.xnb
 C:\Users\YourionY\Documents\GitHub\Tetris\bin\Windows\x86\Debug\Content\BackSprite.xnb
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\Content\BackSprite.xnb
+C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\Content\SideMenu.xnb

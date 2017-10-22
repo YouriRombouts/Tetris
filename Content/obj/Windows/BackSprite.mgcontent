@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/YourionY/Documents/GitHub/Tetris/Content/BackSprite.jpg</SourceFile>
-  <SourceTime>2017-10-22T16:48:25.7945745+02:00</SourceTime>
-  <DestFile>C:/Users/YourionY/Documents/GitHub/Tetris/Content/bin/Windows/BackSprite.xnb</DestFile>
-  <DestTime>2017-10-22T16:48:48.6531107+02:00</DestTime>
+  <SourceFile>C:/Users/timgo/Documents/GitHub/Tetris/Content/BackSprite.jpg</SourceFile>
+  <SourceTime>2017-10-22T16:57:58.3465946+02:00</SourceTime>
+  <DestFile>C:/Users/timgo/Documents/GitHub/Tetris/Content/bin/Windows/BackSprite.xnb</DestFile>
+  <DestTime>2017-10-22T17:15:20.5245643+02:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2016-03-30T08:36:08+02:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

@@ -91,14 +91,6 @@ namespace Tetris
         {
             return (int)m_Pos.Y;
         }
-        public virtual Vector2 GetRRotatedGridPos(int BlockNumber)
-        {
-            return new Vector2(m_Pos.X / 30, m_Pos.Y / 25);
-        }
-        public virtual Vector2 GetLRotatedGridPos(int BlockNumber)
-        {
-            return new Vector2(m_Pos.X / 30, m_Pos.Y / 25);
-        }
         public virtual int GetNextGridPosX(int BlockNumber, int rotation)
         {
             return (int)GetGridPosX();
@@ -117,6 +109,14 @@ namespace Tetris
             {
                 m_Pos.X -= GetMaxPosX() - 360;
             }
+        }
+        public Vector2 GetRRotatedGridPos(int BlockNumber)
+        {
+            return (new Vector2(GetNextGridPosX(BlockNumber, GetNextRotation()), GetNextGridPosY(BlockNumber, GetNextRotation())));
+        }
+        public Vector2 GetLRotatedGridPos(int BlockNumber)
+        {
+            return (new Vector2(GetNextGridPosX(BlockNumber, GetPrevRotation()), GetNextGridPosY(BlockNumber, GetPrevRotation())));
         }
     }
 
@@ -194,11 +194,11 @@ namespace Tetris
         {
             if (Rotation == 1 || Rotation == 3)
             {
-                return (int)GetGridPosX();
+                return GetGridPosX();
             }
             else if (Rotation == 0 || Rotation == 2)
             {
-                return (int)GetGridPosX() + 1 * BlockNumber;
+                return GetGridPosX() + 1 * BlockNumber;
             }
             else { return 0; }
         }
@@ -217,14 +217,6 @@ namespace Tetris
                 return GetGridPosY();
             }
             else { return 0; }
-        }
-        public override Vector2 GetRRotatedGridPos(int BlockNumber)
-        {
-            return (new Vector2(GetNextGridPosX(BlockNumber, GetNextRotation()), GetNextGridPosY(BlockNumber, GetNextRotation())));
-        }
-        public override Vector2 GetLRotatedGridPos(int BlockNumber)
-        {
-            return (new Vector2(GetNextGridPosX(BlockNumber, GetPrevRotation()), GetNextGridPosY(BlockNumber, GetPrevRotation())));
         }
         public override float GetMinPosY()
         {
@@ -680,15 +672,15 @@ namespace Tetris
             {
                 if (BlockNumber == 2)
                 {
-                    return (int)(GetGridPosX());
+                    return (GetGridPosX());
                 }
                 else if (BlockNumber == 3)
                 {
-                    return (int)(GetGridPosX() + 1);
+                    return (GetGridPosX() + 1);
                 }
                 else if (BlockNumber == 1)
                 {
-                    return (int)(GetGridPosX() - 1);
+                    return (GetGridPosX() - 1);
                 }
                 else if (BlockNumber == 0)
                 {
@@ -806,7 +798,7 @@ namespace Tetris
         {
             if (BlockNumber == 1 || BlockNumber == 3)
             {
-                return GetGridPosY() + 1;
+                return GetGridPosY() - 1;
             }
             else
             {
@@ -827,7 +819,7 @@ namespace Tetris
         }
         public override float GetMaxPosY()
         {
-            return m_Pos.Y + m_Height * 2;
+            return m_Pos.Y + m_Height;
         }
     }
     class TShape : Block
@@ -910,7 +902,7 @@ namespace Tetris
                 }
                 else
                 {
-                    return (int)(m_Pos.X - m_Width);
+                    return (int)(m_Pos.X + m_Width);
                 }
             }
             else if (m_Rotation == 2)
@@ -1022,7 +1014,7 @@ namespace Tetris
                 }
                 else
                 {
-                    return (GetGridPosX() - 1);
+                    return (GetGridPosX() + 1);
                 }
             }
             else if (m_Rotation == 2)
