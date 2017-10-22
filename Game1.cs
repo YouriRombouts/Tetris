@@ -174,7 +174,7 @@ namespace Tetris
                 //Time
                 Second -= (float)gameTime.ElapsedGameTime.TotalSeconds;
                 //Score
-                DrawScore = "Score: " + Score.ToString();
+                DrawScore = Score.ToString();
                 //Level
                 Level = BlocksSet / 10 + 1;
                 DrawLevel = "Level: " + Level.ToString();
@@ -408,7 +408,7 @@ namespace Tetris
                     {
                         if ((Second < 0) && (Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(1, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(1, m_ActiveBlock.GetRotation()) + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(2, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(2, m_ActiveBlock.GetRotation()) + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(3, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(3, m_ActiveBlock.GetRotation()) + 1)] != String.Empty))
                         {
-                            if(m_ActiveBlock.GetMinPosY() < 0)
+                            if(m_ActiveBlock.GetMinPosY() < 0 || Grid[7,0] != String.Empty)
                             {
                                 CurrentGameState = "GameOver";
                             }
@@ -547,7 +547,7 @@ namespace Tetris
                 {
                     m_ActiveBlock.Draw(spriteBatch, scale, ActiveColor);
                 }
-                spriteBatch.DrawString(Font, DrawScore, new Vector2(410, 100), Color.White);
+                spriteBatch.DrawString(Font, "Score: " + DrawScore, new Vector2(410, 100), Color.White);
                 spriteBatch.DrawString(Font, DrawLevel, new Vector2(410, 120), Color.White);
                 spriteBatch.DrawString(Font, NextBlock.ToString(), new Vector2(410, 140), Color.White);
                 spriteBatch.DrawString(Font, NextnextBlock.ToString(), new Vector2(410, 160), Color.White);
@@ -562,9 +562,15 @@ namespace Tetris
             else if(CurrentGameState == "GameOver")
             {
                 string Text = "You lose, press 'Space' to go back to main menu";
+                string FinalScore = "Your score was: " + DrawScore;
+                string FinalLevel = "You reached level " + DrawLevel;
                 float StringLength = Font.MeasureString(Text).X;
+                float StringLength1 = Font.MeasureString(FinalScore).X;
+                float StringLength2 = Font.MeasureString(FinalLevel).X;
                 spriteBatch.Draw(GameOverSprite, new Vector2(0, 0), Color.White);
                 spriteBatch.DrawString(Font, Text, new Vector2(280 - StringLength / 2, 350), Color.White);
+                spriteBatch.DrawString(Font, FinalLevel, new Vector2(280 - StringLength2 / 2, 300), Color.White);
+                spriteBatch.DrawString(Font, FinalScore, new Vector2(280 - StringLength1 / 2, 325), Color.White);
             }
             spriteBatch.End();
 
