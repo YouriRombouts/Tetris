@@ -695,11 +695,11 @@ namespace Tetris
         {
             if (IsTShape == true)
             {
-                if (m_Rotation == 0 || m_Rotation == 3 || m_Rotation == 2)
+                if (m_Rotation == 0 || m_Rotation == 1 || m_Rotation == 2)
                 {
                     return (m_Pos.X + 2 * m_Width);
                 }
-                else if (m_Rotation == 1)
+                else if (m_Rotation == 3)
                 {
                     return (m_Pos.X + m_Width);
                 }

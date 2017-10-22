@@ -4,16 +4,16 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Users/YourionY/Documents/GitHub/Tetris/Content/legogreen.png</File>
-    <File>C:/Users/YourionY/Documents/GitHub/Tetris/Content/legoorange.png</File>
-    <File>C:/Users/YourionY/Documents/GitHub/Tetris/Content/legopurple.png</File>
-    <File>C:/Users/YourionY/Documents/GitHub/Tetris/Content/legored.png</File>
-    <File>C:/Users/YourionY/Documents/GitHub/Tetris/Content/legobaby.png</File>
-    <File>C:/Users/YourionY/Documents/GitHub/Tetris/Content/legoblue.png</File>
-    <File>C:/Users/YourionY/Documents/GitHub/Tetris/Content/legoyellow.png</File>
-    <File>C:/Users/YourionY/Documents/GitHub/Tetris/Content/Score.spritefont</File>
-    <File>C:/Users/YourionY/Documents/GitHub/Tetris/Content/SideMenu.jpg</File>
-    <File>C:/Users/YourionY/Documents/GitHub/Tetris/Content/BackSprite.jpg</File>
-    <File>C:/Users/YourionY/Documents/GitHub/Tetris/Content/GameOverSprite.png</File>
+    <File>C:/Users/timgo/Documents/GitHub/Tetris/Content/legogreen.png</File>
+    <File>C:/Users/timgo/Documents/GitHub/Tetris/Content/legoorange.png</File>
+    <File>C:/Users/timgo/Documents/GitHub/Tetris/Content/legopurple.png</File>
+    <File>C:/Users/timgo/Documents/GitHub/Tetris/Content/legored.png</File>
+    <File>C:/Users/timgo/Documents/GitHub/Tetris/Content/legobaby.png</File>
+    <File>C:/Users/timgo/Documents/GitHub/Tetris/Content/legoblue.png</File>
+    <File>C:/Users/timgo/Documents/GitHub/Tetris/Content/legoyellow.png</File>
+    <File>C:/Users/timgo/Documents/GitHub/Tetris/Content/Score.spritefont</File>
+    <File>C:/Users/timgo/Documents/GitHub/Tetris/Content/SideMenu.jpg</File>
+    <File>C:/Users/timgo/Documents/GitHub/Tetris/Content/BackSprite.jpg</File>
+    <File>C:/Users/timgo/Documents/GitHub/Tetris/Content/GameOverSprite.png</File>
   </SourceFiles>
 </SourceFileCollection>
