@@ -433,10 +433,10 @@ namespace Tetris
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-
             // TODO: Add your drawing code here
             spriteBatch.Begin(/*SpriteSortMode.Deferred, null, null, null, null, null, spriteScale*/);
-            spriteBatch.Draw(SideMenu, new Vector2(360, 0));
+            
+                spriteBatch.Draw(SideMenu, new Vector2(360, 0));
             int p = 0;
             for (p = Grid.GetLength(1) - 1; p >= 0; p--)
             {
