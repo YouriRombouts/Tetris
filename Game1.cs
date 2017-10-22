@@ -22,7 +22,7 @@ namespace Tetris
         string[,] Grid;
         bool IsBlockActive, IsLocked;
         Point screen;
-        int /*TargetX,*/ Score, TimeInterval = 1000, BlocksSet, Level , NextnextBlock;
+        int /*TargetX,*/ Score, TimeInterval = 1000, BlocksSet, Level , NextBlock, NextnextBlock;
         float TwoTenthSecond, HalfSecond;
         string DrawScore, DrawLevel;
 
@@ -175,7 +175,7 @@ namespace Tetris
             if (IsBlockActive == false)
             {
                 Random r = new Random();
-                int NextBlock = NextnextBlock;
+                NextBlock = NextnextBlock;
                 NextnextBlock = r.Next(0, 5);
                 if (NextBlock == 0)
                 {
@@ -459,6 +459,8 @@ namespace Tetris
             m_ActiveBlock.Draw(spriteBatch, scale, ActiveColor);
             spriteBatch.DrawString(Font, DrawScore, new Vector2(410, 100), Color.White);
             spriteBatch.DrawString(Font, DrawLevel, new Vector2(410, 120), Color.White);
+            spriteBatch.DrawString(Font, NextBlock.ToString(), new Vector2(410, 140), Color.White);
+            spriteBatch.DrawString(Font, NextnextBlock.ToString(), new Vector2(410, 160), Color.White);
             spriteBatch.End();
 
             base.Draw(gameTime);
