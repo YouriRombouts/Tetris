@@ -841,7 +841,7 @@ namespace Tetris
                 {
                     return (m_Pos.X + 2 * m_Width);
                 }
-                else if(m_Rotation == 1)
+                else if (m_Rotation == 1)
                 {
                     return (m_Pos.X + m_Width);
                 }
@@ -929,7 +929,7 @@ namespace Tetris
             {
                 if (BlockNumber > 0)
                 {
-                    return (int)m_Pos.Y + m_Height;
+                    return (int)m_Pos.Y - m_Height;
                 }
                 else
                 {
@@ -986,7 +986,7 @@ namespace Tetris
                 }
                 else if (BlockNumber == 1)
                 {
-                    return (GetGridPosX() -1);
+                    return (GetGridPosX() - 1);
                 }
                 else if (BlockNumber == 3)
                 {
@@ -1017,7 +1017,7 @@ namespace Tetris
                 }
                 if (BlockNumber == 1)
                 {
-                    return GetGridPosX() -1;
+                    return GetGridPosX() - 1;
                 }
                 if (BlockNumber == 2)
                 {
@@ -1031,36 +1031,77 @@ namespace Tetris
                 {
                     return GetGridPosX();
                 }
-                else return GetGridPosX() -1;
+                else return GetGridPosX() - 1;
             }
             else return 0;
         }
         public override int GetNextGridPosY(int BlockNumber, int Rotation)
         {
-            if (m_Rotation == 0 || m_Rotation == 2)
+            if (m_Rotation == 0)
             {
-                if (BlockNumber < 2)
+                if (BlockNumber > 0)
                 {
-                    return (int)GetGridPosY();
+                    return GetGridPosY() - 1;
                 }
                 else
                 {
-                    return (int)(GetGridPosY() - 1);
+                    return GetGridPosY();
                 }
             }
-            else if (m_Rotation == 1 || m_Rotation == 3)
+            else if (m_Rotation == 1)
             {
-                if (BlockNumber == 3)
+                if (BlockNumber == 3 || BlockNumber == 1)
+                {
+                    return GetGridPosY() - 1;
+                }
+                else if (BlockNumber == 2)
                 {
                     return (int)(GetGridPosY() - 2);
                 }
-                else if (BlockNumber == 1 || BlockNumber == 2)
+                else
                 {
-                    return (int)(GetGridPosY() - 1);
+                    return GetGridPosY();
                 }
-                else return GetGridPosY();
             }
-            else { return 0; }
+            else if (m_Rotation == 2)
+            {
+                if (BlockNumber < 3)
+                {
+                    return GetGridPosY();
+                }
+                else return GetGridPosY() - 1;
+            }
+            else if (m_Rotation == 3)
+            {
+                if (BlockNumber == 1 || BlockNumber == 3)
+                {
+                    return GetGridPosY() - 1;
+                }
+                else if (BlockNumber == 2)
+                {
+                    return GetGridPosY() - 2;
+                }
+                else
+                {
+                    return GetGridPosY();
+                }
+            }
+            else { return GetGridPosY(); }
+        }
+        public override float GetMinPosY()
+        {
+            if (m_Rotation == 0 || m_Rotation == 2)
+            {
+                return m_Pos.Y - m_Height;
+            }
+            else
+            {
+                return m_Pos.Y - m_Height * 2;
+            }
+        }
+        public override float GetMaxPosY()
+        {
+            return m_Pos.Y;
         }
     }
 }
