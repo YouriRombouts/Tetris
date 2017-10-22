@@ -297,7 +297,7 @@ namespace Tetris
                 {
                     try
                     {
-                        if (Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] == String.Empty && m_ActiveBlock.GetMaxPosY() != 500)
+                        if (Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] == String.Empty && m_ActiveBlock.GetMaxPosY() != 500 && IsLocked == false)
                         {
                             m_ActiveBlock.Fall();
                         }
