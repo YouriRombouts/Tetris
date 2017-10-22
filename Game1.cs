@@ -229,7 +229,7 @@ namespace Tetris
                         int OpenBlocks = 0;
                         for (i = 0; i < 4; i++)
                         {
-                            if (Grid[(int)m_ActiveBlock.GetRRotatedGridPos(i).X, (int)m_ActiveBlock.GetRRotatedGridPos(i).Y] == string.Empty)
+                            if (Grid[(int)m_ActiveBlock.GetRRotatedGridPos(i).X, (int)m_ActiveBlock.GetRRotatedGridPos(i).Y] == string.Empty && m_ActiveBlock.GetRRotatedGridPos(i).X < 12)
                             {
                                 OpenBlocks++;
                             }
@@ -250,7 +250,7 @@ namespace Tetris
                         int OpenBlocks = 0;
                         for (i = 0; i < 4; i++)
                         {
-                            if (Grid[(int)m_ActiveBlock.GetLRotatedGridPos(i).X, (int)m_ActiveBlock.GetLRotatedGridPos(i).Y] == string.Empty)
+                            if (Grid[(int)m_ActiveBlock.GetLRotatedGridPos(i).X, (int)m_ActiveBlock.GetLRotatedGridPos(i).Y] == string.Empty && m_ActiveBlock.GetLRotatedGridPos(i).X < 12)
                             {
                                 OpenBlocks++;
                             }
