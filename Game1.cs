@@ -16,25 +16,15 @@ namespace Tetris
         SpriteBatch spriteBatch;
         SpriteFont Font;
         Block m_ActiveBlock;
-        Texture2D LegoBlue, LegoBaby, LegoPurple, ActiveColor, SideMenu;
+        Texture2D LegoBlue, LegoBaby, LegoPurple, ActiveColor, SideMenu, BackSprite;
         Vector2 scale;
         KeyboardState previousKeyboardState, currentKeyboardState;
         string[,] Grid;
         bool IsBlockActive, IsLocked;
         Point screen;
-        int /*TargetX,*/ Score, TimeInterval = 1000, BlocksSet, Level , NextBlock, NextnextBlock;
+        int /*TargetX,*/ Score, TimeInterval = 1000, BlocksSet, Level, NextBlock, NextnextBlock;
         float TwoTenthSecond, HalfSecond;
-        string DrawScore, DrawLevel;
-
-        enum Gamestate
-        {
-            MainMenu,
-            //Options,
-            Playing,
-            GameOver,
-        }
-
-        Gamestate CurrentGameState = Gamestate.MainMenu;
+        string DrawScore, DrawLevel, CurrentGameState;
 
         public void SetFullScreen(bool fullscreen = true)
         {
@@ -89,12 +79,17 @@ namespace Tetris
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            //There is no block before the first update
             IsBlockActive = false;
+            //Set current Gamestate
+            CurrentGameState = "MainMenu";
             //Amount of blocks had
             BlocksSet = 0;
             //initialize score
             Score = 0;
+            DrawScore = "";
+            //initialize level
+            DrawLevel = "";
             //start timer
             System.Timers.Timer aTimer = new System.Timers.Timer();
             aTimer.Elapsed += new ElapsedEventHandler(Everysecond);
@@ -120,6 +115,7 @@ namespace Tetris
             LegoBaby = Content.Load<Texture2D>("legobaby");
             LegoPurple = Content.Load<Texture2D>("legopurple");
             SideMenu = Content.Load<Texture2D>("SideMenu");
+            BackSprite = Content.Load<Texture2D>("BackSprite");
             // TODO: use this.Content to load your game content here
         }
 
@@ -146,291 +142,303 @@ namespace Tetris
 
         protected override void Update(GameTime gameTime)
         {
-            //Time
-            HalfSecond -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-            //Score
-            DrawScore = "Score: " + Score.ToString();
-            //Level
-            Level = BlocksSet / 10 + 1;
-            DrawLevel = "Level: " + Level.ToString();
-            //Speed up the game
-            TimeInterval = 1000 - ((Level - 1) * 10);
-            // TODO: Add your update logic here
-            TwoTenthSecond -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-            //Handle the keyboard input
-            HandleInput();
-            if (currentKeyboardState.IsKeyDown(Keys.F5))
+            if (CurrentGameState == "MainMenu")
             {
-                SetFullScreen(!graphics.IsFullScreen);
+                if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                {
+                    CurrentGameState = "Playing";
+                }
             }
+            else if (CurrentGameState == "Playing")
+            {
+                //Time
+                HalfSecond -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                //Score
+                DrawScore = "Score: " + Score.ToString();
+                //Level
+                Level = BlocksSet / 10 + 1;
+                DrawLevel = "Level: " + Level.ToString();
+                //Speed up the game
+                TimeInterval = 1000 - ((Level - 1) * 10);
+                // TODO: Add your update logic here
+                TwoTenthSecond -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (currentKeyboardState.IsKeyDown(Keys.Escape))
-            {
-                this.Exit();
-            }
-            //Spawn m_ActiveBlock
-            if (IsBlockActive == false)
-            {
-                Random r = new Random();
-                NextBlock = NextnextBlock;
-                NextnextBlock = r.Next(0, 5);
-                if (NextBlock == 0)
+                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+                    Exit();
+                //Handle the keyboard input
+                HandleInput();
+                if (currentKeyboardState.IsKeyDown(Keys.F5))
                 {
-                    m_ActiveBlock = new IShape(new Vector2(180, 0));
+                    SetFullScreen(!graphics.IsFullScreen);
                 }
-                if (NextBlock == 1)
-                {
-                    m_ActiveBlock = new ZShape(new Vector2(180, 0));
-                }
-                if (NextBlock == 2)
-                {
-                    m_ActiveBlock = new SShape(new Vector2(180, 0));
-                }
-                if (NextBlock == 3)
-                {
-                    m_ActiveBlock = new TShape(new Vector2(180, 0));
-                }
-                if (NextBlock == 4)
-                {
-                    m_ActiveBlock = new OShape(new Vector2(180, 0));
-                }
-                /*if (NextBlock == 5)
-                {
-                    m_ActiveBlock = new TShape(new Vector2(180, 0));
-                }
-                if (NextBlock == 6)
-                {
-                    m_ActiveBlock = new TShape(new Vector2(180, 0));
-                }*/
-                else
-                {
 
-                }
-                int TargetX = m_ActiveBlock.GetWidth();
-                scale = new Vector2(TargetX / (float)LegoBlue.Width, TargetX / (float)LegoBlue.Width);
-                ActiveColor = Content.Load<Texture2D>(m_ActiveBlock.GetColor());
-                IsBlockActive = true;
-                IsLocked = false;
-            }
-            //Rotate block
-            if (currentKeyboardState.IsKeyDown(Keys.A) && previousKeyboardState.IsKeyUp(Keys.A))
-            {
-                try
+                if (currentKeyboardState.IsKeyDown(Keys.Escape))
                 {
-                    int i;
-                    int OpenBlocks = 0;
-                    for (i = 0; i < 4; i++)
+                    this.Exit();
+                }
+                //Spawn m_ActiveBlock
+                if (IsBlockActive == false)
+                {
+                    Random r = new Random();
+                    NextBlock = NextnextBlock;
+                    NextnextBlock = r.Next(0, 5);
+                    if (NextBlock == 0)
                     {
-                        if (Grid[(int)m_ActiveBlock.GetRRotatedGridPos(i).X, (int)m_ActiveBlock.GetRRotatedGridPos(i).Y] == string.Empty)
+                        m_ActiveBlock = new IShape(new Vector2(180, 0));
+                    }
+                    if (NextBlock == 1)
+                    {
+                        m_ActiveBlock = new ZShape(new Vector2(180, 0));
+                    }
+                    if (NextBlock == 2)
+                    {
+                        m_ActiveBlock = new SShape(new Vector2(180, 0));
+                    }
+                    if (NextBlock == 3)
+                    {
+                        m_ActiveBlock = new TShape(new Vector2(180, 0));
+                    }
+                    if (NextBlock == 4)
+                    {
+                        m_ActiveBlock = new OShape(new Vector2(180, 0));
+                    }
+                    /*if (NextBlock == 5)
+                    {
+                        m_ActiveBlock = new TShape(new Vector2(180, 0));
+                    }
+                    if (NextBlock == 6)
+                    {
+                        m_ActiveBlock = new TShape(new Vector2(180, 0));
+                    }*/
+                    else
+                    {
+
+                    }
+                    int TargetX = m_ActiveBlock.GetWidth();
+                    scale = new Vector2(TargetX / (float)LegoBlue.Width, TargetX / (float)LegoBlue.Width);
+                    ActiveColor = Content.Load<Texture2D>(m_ActiveBlock.GetColor());
+                    IsBlockActive = true;
+                    IsLocked = false;
+                }
+                //Rotate block
+                if (currentKeyboardState.IsKeyDown(Keys.A) && previousKeyboardState.IsKeyUp(Keys.A))
+                {
+                    try
+                    {
+                        int i;
+                        int OpenBlocks = 0;
+                        for (i = 0; i < 4; i++)
                         {
-                            OpenBlocks++;
+                            if (Grid[(int)m_ActiveBlock.GetRRotatedGridPos(i).X, (int)m_ActiveBlock.GetRRotatedGridPos(i).Y] == string.Empty)
+                            {
+                                OpenBlocks++;
+                            }
+                        }
+                        if (OpenBlocks == 4)
+                        {
+                            HalfSecond = 0.5f;
+                            m_ActiveBlock.AddRotation();
                         }
                     }
-                    if (OpenBlocks == 4)
-                    {
-                        HalfSecond = 0.5f;
-                        m_ActiveBlock.AddRotation();
-                    }
+                    catch (IndexOutOfRangeException) { };
                 }
-                catch (IndexOutOfRangeException) { };
-            }
-            if (currentKeyboardState.IsKeyDown(Keys.D) && previousKeyboardState.IsKeyUp(Keys.D))
-            {
-                try
+                if (currentKeyboardState.IsKeyDown(Keys.D) && previousKeyboardState.IsKeyUp(Keys.D))
                 {
-                    int i;
-                    int OpenBlocks = 0;
-                    for (i = 0; i < 4; i++)
+                    try
                     {
-                        if (Grid[(int)m_ActiveBlock.GetLRotatedGridPos(i).X, (int)m_ActiveBlock.GetLRotatedGridPos(i).Y] == string.Empty)
+                        int i;
+                        int OpenBlocks = 0;
+                        for (i = 0; i < 4; i++)
                         {
-                            OpenBlocks++;
+                            if (Grid[(int)m_ActiveBlock.GetLRotatedGridPos(i).X, (int)m_ActiveBlock.GetLRotatedGridPos(i).Y] == string.Empty)
+                            {
+                                OpenBlocks++;
+                            }
+                        }
+                        if (OpenBlocks == 4)
+                        {
+                            HalfSecond = 0.5f;
+                            m_ActiveBlock.SubRotation();
                         }
                     }
-                    if (OpenBlocks == 4)
+                    catch (IndexOutOfRangeException) { };
+                }
+                //Move block horizontally
+                //left
+                if ((currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyUp(Keys.Left) || (currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyDown(Keys.Left) && TwoTenthSecond < 0)) && m_ActiveBlock.GetMinPosX() > 0)
+                {
+                    TwoTenthSecond = 0.2f;
+                    if (Grid[m_ActiveBlock.GetGridPosX() - 1, m_ActiveBlock.GetGridPosY()] == string.Empty)
                     {
                         HalfSecond = 0.5f;
-                        m_ActiveBlock.SubRotation();
+                        m_ActiveBlock.MoveHorizontal(-m_ActiveBlock.GetWidth());
                     }
                 }
-                catch (IndexOutOfRangeException) { };
-            }
-            //Move block horizontally
-            //left
-            if ((currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyUp(Keys.Left) || (currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyDown(Keys.Left) && TwoTenthSecond < 0)) && m_ActiveBlock.GetMinPosX() > 0)
-            {
-                TwoTenthSecond = 0.2f;
-                if (Grid[m_ActiveBlock.GetGridPosX() - 1, m_ActiveBlock.GetGridPosY()] == string.Empty)
+                //right
+                if ((currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyUp(Keys.Right) || (currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyDown(Keys.Right) && TwoTenthSecond < 0)) && m_ActiveBlock.GetMaxPosX() < 360)
                 {
-                    HalfSecond = 0.5f;
-                    m_ActiveBlock.MoveHorizontal(-m_ActiveBlock.GetWidth());
+                    TwoTenthSecond = 0.2f;
+                    if (Grid[m_ActiveBlock.GetGridPosX() + 1, m_ActiveBlock.GetGridPosY()] == string.Empty)
+                    {
+                        HalfSecond = 0.5f;
+                        m_ActiveBlock.MoveHorizontal(m_ActiveBlock.GetWidth());
+                    }
                 }
-            }
-            //right
-            if ((currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyUp(Keys.Right) || (currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyDown(Keys.Right) && TwoTenthSecond < 0)) && m_ActiveBlock.GetMaxPosX() < 360)
-            {
-                TwoTenthSecond = 0.2f;
-                if (Grid[m_ActiveBlock.GetGridPosX() + 1, m_ActiveBlock.GetGridPosY()] == string.Empty)
+                //Move block down
+                if ((currentKeyboardState.IsKeyDown(Keys.Down) && previousKeyboardState.IsKeyUp(Keys.Down) || (currentKeyboardState.IsKeyDown(Keys.Down) && previousKeyboardState.IsKeyDown(Keys.Down) && TwoTenthSecond < 0)) && m_ActiveBlock.GetPosY() != 475 && IsLocked == false)
                 {
-                    HalfSecond = 0.5f;
-                    m_ActiveBlock.MoveHorizontal(m_ActiveBlock.GetWidth());
+                    TwoTenthSecond = 0.2f;
+                    if (Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] == String.Empty)
+                    {
+                        m_ActiveBlock.Fall();
+                    }
                 }
-            }
-            //Move block down
-            if ((currentKeyboardState.IsKeyDown(Keys.Down) && previousKeyboardState.IsKeyUp(Keys.Down) || (currentKeyboardState.IsKeyDown(Keys.Down) && previousKeyboardState.IsKeyDown(Keys.Down) && TwoTenthSecond < 0)) && m_ActiveBlock.GetPosY() != 475 && IsLocked == false)
-            {
-                TwoTenthSecond = 0.2f;
-                if (Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] == String.Empty)
+                if (currentKeyboardState.IsKeyDown(Keys.Up))
                 {
-                    m_ActiveBlock.Fall();
+                    try
+                    {
+                        if (Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] == String.Empty && m_ActiveBlock.GetMaxPosY() != 500)
+                        {
+                            m_ActiveBlock.Fall();
+                        }
+                    }
+                    catch (IndexOutOfRangeException) { };
                 }
+                //Make sure the block stays in screen horizontally
+                if (m_ActiveBlock.GetMaxPosX() > graphics.GraphicsDevice.Viewport.Width)
+                {
+                    m_ActiveBlock.GBISX();
+                }
+                else if (m_ActiveBlock.GetMinPosX() < 0)
+                {
+                    m_ActiveBlock.SetPosX((int)-m_ActiveBlock.GetMinPosX());
+                }
+
+                //Remove empty rows
+                int y;
+                for (y = 1; y < 20; y++)
+                {
+                    int x;
+                    int EmptyInRow = 0;
+                    for (x = 0; x < 12; x++)
+                    {
+                        if (Grid[x, y] == string.Empty)
+                        {
+                            EmptyInRow++;
+                            if (EmptyInRow == 12)
+                            {
+                                for (x = 0; x < 12; x++)
+                                {
+                                    Grid[x, y] = Grid[x, y - 1];
+                                    Grid[x, y - 1] = string.Empty;
+                                }
+                            }
+                        }
+                        else if (Grid[x, y] != string.Empty)
+                        {
+                            EmptyInRow = 0;
+                        }
+                    }
+                }
+                if (m_ActiveBlock.GetMaxPosY() < 500)
+                {
+                    try
+                    {
+                        if (Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(1, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(1, m_ActiveBlock.GetRotation()) + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(2, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(2, m_ActiveBlock.GetRotation()) + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(3, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(3, m_ActiveBlock.GetRotation()) + 1)] != String.Empty && HalfSecond < 0)
+                        {
+                            IsLocked = true;
+                            BlocksSet++;
+                        }
+                    }
+                    catch (IndexOutOfRangeException) { };
+                }
+                else if (m_ActiveBlock.GetMaxPosY() == 500 && HalfSecond < 0)
+                {
+                    IsLocked = true;
+                    BlocksSet++;
+                }
+
+                if (IsLocked == true)
+                {
+                    //Set grid value to the color of activeblock           
+                    try
+                    {
+                        int i = 0;
+                        for (i = 0; i < 4; i++)
+                        {
+                            Grid[m_ActiveBlock.GetNextGridPosX(i, m_ActiveBlock.GetRotation()), m_ActiveBlock.GetNextGridPosY(i, m_ActiveBlock.GetRotation())] = m_ActiveBlock.GetColor();
+                        }
+                        IsBlockActive = false;
+                        int InARow = 0;
+                        int FullRow = 12;
+                        for (y = 0; y < 20; y++)
+                        {
+                            int x = 0;
+                            InARow = 0;
+                            for (x = 0; x < 12; x++)
+                            {
+                                if (Grid[x, y] != string.Empty)
+                                {
+                                    InARow++;
+                                    if (InARow == 12)
+                                    {
+                                        FullRow = y;
+                                        Score += 100;
+                                    }
+                                }
+                                else
+                                {
+                                    InARow = 0;
+                                }
+                            }
+                            if (InARow == 12)
+                            {
+                                for (x = 0; x < 12; x++)
+                                {
+                                    Grid[x, y] = string.Empty;
+                                }
+
+                            }
+                        }
+
+
+                        //Empty full rows and move rows down
+                        if (InARow == 12)
+                        {
+                            for (y = FullRow - 1; y >= 0; y--)
+                            {
+                                int x;
+                                for (x = 0; x < 12; x++)
+                                {
+                                    if (Grid[x, y + 1] == string.Empty)
+                                    {
+                                        Grid[x, y + 1] = Grid[x, y];
+                                        Grid[x, y] = string.Empty;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (IndexOutOfRangeException) { }
+                }
+
+                base.Update(gameTime);
             }
-            if (currentKeyboardState.IsKeyDown(Keys.Up))
+    }
+        private void Everysecond(object source, ElapsedEventArgs e)
+        {
+            if (CurrentGameState == "Playing" && IsBlockActive == true)
             {
+                HalfSecond = 0.5f;
                 try
                 {
-                    if (Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] == String.Empty && m_ActiveBlock.GetMaxPosY() != 500)
+                    if (m_ActiveBlock.GetMaxPosY() != graphics.GraphicsDevice.Viewport.Height && m_ActiveBlock.GetMaxPosY() < graphics.GraphicsDevice.Viewport.Height && currentKeyboardState.IsKeyUp(Keys.Down))
                     {
                         m_ActiveBlock.Fall();
                     }
                 }
                 catch (IndexOutOfRangeException) { };
             }
-            //Make sure the block stays in screen horizontally
-            if (m_ActiveBlock.GetMaxPosX() > graphics.GraphicsDevice.Viewport.Width)
-            {
-                m_ActiveBlock.GBISX();
-            }
-            else if (m_ActiveBlock.GetMinPosX() < 0)
-            {
-                m_ActiveBlock.SetPosX((int)-m_ActiveBlock.GetMinPosX());
-            }
-
-            //Remove empty rows
-            int y;
-            for (y = 1; y < 20; y++)
-            {
-                int x;
-                int EmptyInRow = 0;
-                for (x = 0; x < 12; x++)
-                {
-                    if (Grid[x, y] == string.Empty)
-                    {
-                        EmptyInRow++;
-                        if (EmptyInRow == 12)
-                        {
-                            for (x = 0; x < 12; x++)
-                            {
-                                Grid[x, y] = Grid[x, y - 1];
-                                Grid[x, y - 1] = string.Empty;
-                            }
-                        }
-                    }
-                    else if (Grid[x, y] != string.Empty)
-                    {
-                        EmptyInRow = 0;
-                    }
-                }
-            }
-            if (m_ActiveBlock.GetMaxPosY() < 500)
-            {
-                try
-                {
-                    if (Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(1, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(1, m_ActiveBlock.GetRotation()) + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(2, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(2, m_ActiveBlock.GetRotation()) + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(3, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(3, m_ActiveBlock.GetRotation()) + 1)] != String.Empty && HalfSecond < 0)
-                    {
-                        IsLocked = true;
-                        BlocksSet++;
-                    }
-                }
-                catch (IndexOutOfRangeException) { };
-            }
-            else if (m_ActiveBlock.GetMaxPosY() == 500 && HalfSecond < 0)
-            {
-                IsLocked = true;
-                BlocksSet++;
-            }
-
-            if (IsLocked == true)
-            {
-                //Set grid value to the color of activeblock           
-                try
-                {
-                    int i = 0;
-                    for (i = 0; i < 4; i++)
-                    {
-                        Grid[m_ActiveBlock.GetNextGridPosX(i, m_ActiveBlock.GetRotation()), m_ActiveBlock.GetNextGridPosY(i, m_ActiveBlock.GetRotation())] = m_ActiveBlock.GetColor();
-                    }
-                    IsBlockActive = false;
-                    int InARow = 0;
-                    int FullRow = 12;
-                    for (y = 0; y < 20; y++)
-                    {
-                        int x = 0;
-                        InARow = 0;
-                        for (x = 0; x < 12; x++)
-                        {
-                            if (Grid[x, y] != string.Empty)
-                            {
-                                InARow++;
-                                if (InARow == 12)
-                                {
-                                    FullRow = y;
-                                    Score += 100;
-                                }
-                            }
-                            else
-                            {
-                                InARow = 0;
-                            }
-                        }
-                        if (InARow == 12)
-                        {
-                            for (x = 0; x < 12; x++)
-                            {
-                                Grid[x, y] = string.Empty;
-                            }
-
-                        }
-                    }
-
-
-                    //Empty full rows and move rows down
-                    if (InARow == 12)
-                    {
-                        for (y = FullRow - 1; y >= 0; y--)
-                        {
-                            int x;
-                            for (x = 0; x < 12; x++)
-                            {
-                                if (Grid[x, y + 1] == string.Empty)
-                                {
-                                    Grid[x, y + 1] = Grid[x, y];
-                                    Grid[x, y] = string.Empty;
-                                }
-                            }
-                        }
-                    }
-                }
-                catch (IndexOutOfRangeException) { }
-            }
-
-            base.Update(gameTime);
-        }
-
-        private void Everysecond(object source, ElapsedEventArgs e)
-        {
-            HalfSecond = 0.5f;
-            try
-            {
-                if (m_ActiveBlock.GetMaxPosY() != graphics.GraphicsDevice.Viewport.Height && m_ActiveBlock.GetMaxPosY() < graphics.GraphicsDevice.Viewport.Height && currentKeyboardState.IsKeyUp(Keys.Down))
-                {
-                    m_ActiveBlock.Fall();
-                }
-            }
-            catch (IndexOutOfRangeException) { };
         }
 
         /// <summary>
@@ -442,25 +450,38 @@ namespace Tetris
             GraphicsDevice.Clear(Color.Black);
             // TODO: Add your drawing code here
             spriteBatch.Begin(/*SpriteSortMode.Deferred, null, null, null, null, null, spriteScale*/);
-            
-                spriteBatch.Draw(SideMenu, new Vector2(360, 0));
-            int p = 0;
-            for (p = Grid.GetLength(1) - 1; p >= 0; p--)
+            if (CurrentGameState == "Playing")
             {
-                int o = 0;
-                for (o = Grid.GetLength(0) - 1; o >= 0; o--)
+                spriteBatch.Draw(SideMenu, new Vector2(360, 0));
+                int p = 0;
+                for (p = Grid.GetLength(1) - 1; p >= 0; p--)
                 {
-                    if (Grid[o, p] != String.Empty)
+                    int o = 0;
+                    for (o = Grid.GetLength(0) - 1; o >= 0; o--)
                     {
-                        spriteBatch.Draw(Content.Load<Texture2D>(Grid[o, p]), new Vector2(o * 30, p * 25), scale: scale);
+                        if (Grid[o, p] != String.Empty)
+                        {
+                            spriteBatch.Draw(Content.Load<Texture2D>(Grid[o, p]), new Vector2(o * 30, p * 25), scale: scale);
+                        }
                     }
                 }
+                if (IsBlockActive == true)
+                {
+                    m_ActiveBlock.Draw(spriteBatch, scale, ActiveColor);
+                }
+                spriteBatch.DrawString(Font, DrawScore, new Vector2(410, 100), Color.White);
+                spriteBatch.DrawString(Font, DrawLevel, new Vector2(410, 120), Color.White);
+                spriteBatch.DrawString(Font, NextBlock.ToString(), new Vector2(410, 140), Color.White);
+                spriteBatch.DrawString(Font, NextnextBlock.ToString(), new Vector2(410, 160), Color.White);
             }
-            m_ActiveBlock.Draw(spriteBatch, scale, ActiveColor);
-            spriteBatch.DrawString(Font, DrawScore, new Vector2(410, 100), Color.White);
-            spriteBatch.DrawString(Font, DrawLevel, new Vector2(410, 120), Color.White);
-            spriteBatch.DrawString(Font, NextBlock.ToString(), new Vector2(410, 140), Color.White);
-            spriteBatch.DrawString(Font, NextnextBlock.ToString(), new Vector2(410, 160), Color.White);
+            else if (CurrentGameState == "MainMenu")
+            {
+                string Text = "Press 'Space' To Start";
+                float StringLength = Font.MeasureString(Text).X;
+                spriteBatch.Draw(BackSprite, new Vector2(0, 0), Color.White);
+                spriteBatch.DrawString(Font, Text, new Vector2(280 - StringLength / 2, 350), Color.White);
+
+            }                           
             spriteBatch.End();
 
             base.Draw(gameTime);
