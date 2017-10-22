@@ -16,14 +16,14 @@ namespace Tetris
         SpriteBatch spriteBatch;
         SpriteFont Font;
         Block m_ActiveBlock;
-        Texture2D LegoBlue, LegoBaby, LegoPurple, ActiveColor, SideMenu, BackSprite;
+        Texture2D LegoBlue, LegoBaby, LegoPurple, ActiveColor, SideMenu, BackSprite, GameOverSprite;
         Vector2 scale;
         KeyboardState previousKeyboardState, currentKeyboardState;
         string[,] Grid;
         bool IsBlockActive, IsLocked;
         Point screen;
         int /*TargetX,*/ Score, TimeInterval = 1000, BlocksSet, Level, NextBlock, NextnextBlock;
-        float TwoTenthSecond, HalfSecond;
+        float TwoTenthSecond, Second;
         string DrawScore, DrawLevel, CurrentGameState;
 
         public void SetFullScreen(bool fullscreen = true)
@@ -96,7 +96,7 @@ namespace Tetris
             aTimer.Interval = TimeInterval;
             aTimer.Enabled = true;
             //0.2 second timer
-            HalfSecond = 0.5f;
+            Second = 0.99f;
             TwoTenthSecond = 0.2f;
             //Initialize and fill grid
             Grid = new string[12, 20];
@@ -116,6 +116,7 @@ namespace Tetris
             LegoPurple = Content.Load<Texture2D>("legopurple");
             SideMenu = Content.Load<Texture2D>("SideMenu");
             BackSprite = Content.Load<Texture2D>("BackSprite");
+            GameOverSprite = Content.Load<Texture2D>("GameOverSprite");
             // TODO: use this.Content to load your game content here
         }
 
@@ -142,17 +143,36 @@ namespace Tetris
 
         protected override void Update(GameTime gameTime)
         {
+            HandleInput();
             if (CurrentGameState == "MainMenu")
             {
-                if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                if (currentKeyboardState.IsKeyDown(Keys.Space) && previousKeyboardState.IsKeyUp(Keys.Space))
                 {
                     CurrentGameState = "Playing";
+                }
+            }
+            else if(CurrentGameState == "GameOver")
+            {
+                if(currentKeyboardState.IsKeyDown(Keys.Space) && previousKeyboardState.IsKeyUp(Keys.Space))
+                {
+                    CurrentGameState = "MainMenu";
+                    Score = 0;
+                    BlocksSet = 0;
+                    int y;
+                    for(y = 0; y < 20; y++)
+                    {
+                        int x;
+                        for(x = 0; x < 12; x++)
+                        {
+                            Grid[x, y] = string.Empty;
+                        }
+                    }                  
                 }
             }
             else if (CurrentGameState == "Playing")
             {
                 //Time
-                HalfSecond -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                Second -= (float)gameTime.ElapsedGameTime.TotalSeconds;
                 //Score
                 DrawScore = "Score: " + Score.ToString();
                 //Level
@@ -165,8 +185,7 @@ namespace Tetris
 
                 if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                     Exit();
-                //Handle the keyboard input
-                HandleInput();
+                //Handle the keyboard input                
                 if (currentKeyboardState.IsKeyDown(Keys.F5))
                 {
                     SetFullScreen(!graphics.IsFullScreen);
@@ -236,7 +255,7 @@ namespace Tetris
                         }
                         if (OpenBlocks == 4)
                         {
-                            HalfSecond = 0.5f;
+                            Second = 0.99f;
                             m_ActiveBlock.AddRotation();
                         }
                     }
@@ -257,7 +276,7 @@ namespace Tetris
                         }
                         if (OpenBlocks == 4)
                         {
-                            HalfSecond = 0.5f;
+                            Second = 1f;
                             m_ActiveBlock.SubRotation();
                         }
                     }
@@ -281,7 +300,7 @@ namespace Tetris
                         }
                         if (OpenBlocks == 4)
                         {
-                            HalfSecond = 0.5f;
+                            Second = 0.99f;
                             m_ActiveBlock.MoveHorizontal(-m_ActiveBlock.GetWidth());
                         }
                     }
@@ -387,15 +406,22 @@ namespace Tetris
                 {
                     try
                     {
-                        if (Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(1, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(1, m_ActiveBlock.GetRotation()) + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(2, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(2, m_ActiveBlock.GetRotation()) + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(3, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(3, m_ActiveBlock.GetRotation()) + 1)] != String.Empty && HalfSecond < 0)
+                        if ((Second < 0) && (Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(1, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(1, m_ActiveBlock.GetRotation()) + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(2, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(2, m_ActiveBlock.GetRotation()) + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(3, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(3, m_ActiveBlock.GetRotation()) + 1)] != String.Empty))
                         {
-                            IsLocked = true;
-                            BlocksSet++;
+                            if(m_ActiveBlock.GetMinPosY() < 0)
+                            {
+                                CurrentGameState = "GameOver";
+                            }
+                            else
+                            {
+                                IsLocked = true;
+                                BlocksSet++;
+                            }                            
                         }
                     }
                     catch (IndexOutOfRangeException) { };
                 }
-                else if (m_ActiveBlock.GetMaxPosY() == 500 && HalfSecond < 0)
+                else if (m_ActiveBlock.GetMaxPosY() == 500 && Second < 0)
                 {
                     IsLocked = true;
                     BlocksSet++;
@@ -472,10 +498,19 @@ namespace Tetris
         {
             if (CurrentGameState == "Playing" && IsBlockActive == true)
             {
-                HalfSecond = 0.5f;
+                Second = 0.99f;
                 try
                 {
-                    if (m_ActiveBlock.GetMaxPosY() != graphics.GraphicsDevice.Viewport.Height && m_ActiveBlock.GetMaxPosY() < graphics.GraphicsDevice.Viewport.Height && currentKeyboardState.IsKeyUp(Keys.Down))
+                    int i;
+                    int OpenBlocks = 0;
+                    for (i = 0; i < 4; i++)
+                    {
+                        if (Grid[m_ActiveBlock.GetNextGridPosX(i, m_ActiveBlock.GetRotation()), m_ActiveBlock.GetNextGridPosY(i, m_ActiveBlock.GetRotation()) + 1] == string.Empty)
+                        {
+                            OpenBlocks++;
+                        }
+                    }
+                    if (OpenBlocks == 4)
                     {
                         m_ActiveBlock.Fall();
                     }
@@ -523,8 +558,14 @@ namespace Tetris
                 float StringLength = Font.MeasureString(Text).X;
                 spriteBatch.Draw(BackSprite, new Vector2(0, 0), Color.White);
                 spriteBatch.DrawString(Font, Text, new Vector2(280 - StringLength / 2, 350), Color.White);
-
             }                           
+            else if(CurrentGameState == "GameOver")
+            {
+                string Text = "You lose, press 'Space' to go back to main menu";
+                float StringLength = Font.MeasureString(Text).X;
+                spriteBatch.Draw(GameOverSprite, new Vector2(0, 0), Color.White);
+                spriteBatch.DrawString(Font, Text, new Vector2(280 - StringLength / 2, 350), Color.White);
+            }
             spriteBatch.End();
 
             base.Draw(gameTime);

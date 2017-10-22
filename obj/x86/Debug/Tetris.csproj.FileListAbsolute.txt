@@ -100,3 +100,4 @@ C:\Users\YourionY\Documents\GitHub\Tetris\bin\Windows\x86\Debug\Content\SideMenu
 C:\Users\YourionY\Documents\GitHub\Tetris\bin\Windows\x86\Debug\Content\BackSprite.xnb
 C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\Content\BackSprite.xnb
 C:\Users\timgo\Documents\GitHub\Tetris\bin\Windows\x86\Debug\Content\SideMenu.xnb
+C:\Users\YourionY\Documents\GitHub\Tetris\bin\Windows\x86\Debug\Content\GameOverSprite.xnb
