@@ -223,8 +223,8 @@ namespace Tetris
                 //Rotate block
                 if (currentKeyboardState.IsKeyDown(Keys.A) && previousKeyboardState.IsKeyUp(Keys.A))
                 {
-                    //try
-                    //{
+                    try
+                    {
                         int i;
                         int OpenBlocks = 0;
                         for (i = 0; i < 4; i++)
@@ -239,8 +239,8 @@ namespace Tetris
                             HalfSecond = 0.5f;
                             m_ActiveBlock.AddRotation();
                         }
-                    //}
-                    //catch (IndexOutOfRangeException) { };
+                    }
+                    catch (IndexOutOfRangeException) { };
                 }
                 if (currentKeyboardState.IsKeyDown(Keys.D) && previousKeyboardState.IsKeyUp(Keys.D))
                 {
