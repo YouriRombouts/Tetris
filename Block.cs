@@ -987,7 +987,7 @@ namespace Tetris
             {
                 if (m_Rotation == 2 || m_Rotation == 0)
                 {
-                    return (m_Pos.X + 2 * m_Width);
+                    return (m_Pos.X + 3 * m_Width);
                 }
                 else if (m_Rotation == 1)
                 {
@@ -1182,7 +1182,7 @@ namespace Tetris
                 }
                 else if (BlockNumber == 2)
                 {
-                    return GetGridPosX();
+                    return GetGridPosX() + 1;
                 }
                 else
                 {
@@ -1291,9 +1291,9 @@ namespace Tetris
         {
             if (IsJShape == true)
             {
-                if (m_Rotation == 2 || m_Rotation == 0)
+                if (m_Rotation == 2)
                 {
-                    return (m_Pos.X + 2 * m_Width);
+                    return (m_Pos.X + 3 * m_Width);
                 }
                 else if (m_Rotation == 1)
                 {
@@ -1302,6 +1302,10 @@ namespace Tetris
                 else if (m_Rotation == 3)
                 {
                     return m_Pos.X - m_Width;
+                }
+                else if (m_Rotation == 0)
+                {
+                    return m_Pos.X + m_Width;
                 }
                 else
                 {
@@ -1316,9 +1320,13 @@ namespace Tetris
 
         public override float GetMinPosX()
         {
-            if (m_Rotation == 1 || m_Rotation == 2 || m_Rotation == 0)
+            if (m_Rotation == 1 || m_Rotation == 2)
             {
                 return (m_Pos.X);
+            }
+            else if(m_Rotation == 0)
+            {
+                return m_Pos.X - m_Width * 2;
             }
             else return m_Pos.X - m_Width;
         }
@@ -1492,7 +1500,7 @@ namespace Tetris
                 }
                 else if (BlockNumber == 2)
                 {
-                    return GetGridPosX();
+                    return GetGridPosX() + 1;
                 }
                 else
                 {

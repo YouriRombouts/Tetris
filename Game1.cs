@@ -20,6 +20,7 @@ namespace Tetris
         Vector2 scale;
         KeyboardState previousKeyboardState, currentKeyboardState;
         string[,] Grid;
+        string[] NameList;
         bool IsBlockActive, IsLocked;
         Point screen;
         int /*TargetX,*/ Score, TimeInterval = 1000, BlocksSet, Level, NextBlock, NextnextBlock;
@@ -109,6 +110,16 @@ namespace Tetris
                     Grid[x, y] = String.Empty;
                 }
             }
+            //Make namelist
+            NameList = new string[7];
+            NameList[0] = "I Shape";
+            NameList[1] = "Z Shape";
+            NameList[2] = "S Shape";
+            NameList[3] = "T Shape";
+            NameList[4] = "O Shape";
+            NameList[5] = "L Shape";
+            NameList[6] = "J Shape";
+
             //Load content
             Font = Content.Load<SpriteFont>("Score");
             LegoBlue = Content.Load<Texture2D>("legoblue");
@@ -201,7 +212,7 @@ namespace Tetris
                 {
                     Random r = new Random();
                     NextBlock = NextnextBlock;
-                    NextnextBlock = r.Next(0, 5);
+                    NextnextBlock = r.Next(0, 7);
                     if (NextBlock == 0)
                     {
                         m_ActiveBlock = new IShape(new Vector2(180, 0));
@@ -243,10 +254,10 @@ namespace Tetris
                 //Rotate block
                 if (currentKeyboardState.IsKeyDown(Keys.A) && previousKeyboardState.IsKeyUp(Keys.A))
                 {
+                    int OpenBlocks = 0;
                     try
                     {
-                        int i;
-                        int OpenBlocks = 0;
+                        int i;                        
                         for (i = 0; i < 4; i++)
                         {
                             if (Grid[(int)m_ActiveBlock.GetRRotatedGridPos(i).X, (int)m_ActiveBlock.GetRRotatedGridPos(i).Y] == string.Empty && m_ActiveBlock.GetRRotatedGridPos(i).X < 12)
@@ -258,16 +269,17 @@ namespace Tetris
                         {
                             Second = 0.99f;
                             m_ActiveBlock.AddRotation();
+                            OpenBlocks = 0;
                         }
                     }
                     catch (IndexOutOfRangeException) { };
                 }
                 if (currentKeyboardState.IsKeyDown(Keys.D) && previousKeyboardState.IsKeyUp(Keys.D))
                 {
+                    int OpenBlocks = 0;
                     try
                     {
-                        int i;
-                        int OpenBlocks = 0;
+                        int i;                        
                         for (i = 0; i < 4; i++)
                         {
                             if (Grid[(int)m_ActiveBlock.GetLRotatedGridPos(i).X, (int)m_ActiveBlock.GetLRotatedGridPos(i).Y] == string.Empty && m_ActiveBlock.GetLRotatedGridPos(i).X < 12)
@@ -279,6 +291,7 @@ namespace Tetris
                         {
                             Second = 1f;
                             m_ActiveBlock.SubRotation();
+                            OpenBlocks = 0;
                         }
                     }
                     catch (IndexOutOfRangeException) { };
@@ -407,7 +420,7 @@ namespace Tetris
                 {
                     try
                     {
-                        if ((Second < 0) && (Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(1, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(1, m_ActiveBlock.GetRotation()) + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(2, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(2, m_ActiveBlock.GetRotation()) + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(3, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(3, m_ActiveBlock.GetRotation()) + 1)] != String.Empty && Grid[m_ActiveBlock.GetGridPosX(), m_ActiveBlock.GetGridPosY()] != String.Empty))
+                        if ((Second < 0) && (Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(1, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(1, m_ActiveBlock.GetRotation()) + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(2, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(2, m_ActiveBlock.GetRotation()) + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(3, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(3, m_ActiveBlock.GetRotation()) + 1)] != String.Empty))
                         {
                             if(m_ActiveBlock.GetMinPosY() <= 0)
                             {
@@ -499,7 +512,7 @@ namespace Tetris
         {
             if (CurrentGameState == "Playing" && IsBlockActive == true)
             {
-                Second = 0.99f;
+                Second = 0.95f;
                 try
                 {
                     int i;
@@ -550,8 +563,7 @@ namespace Tetris
                 }
                 spriteBatch.DrawString(Font, "Score: " + DrawScore, new Vector2(410, 100), Color.White);
                 spriteBatch.DrawString(Font, DrawLevel, new Vector2(410, 120), Color.White);
-                spriteBatch.DrawString(Font, NextBlock.ToString(), new Vector2(410, 140), Color.White);
-                spriteBatch.DrawString(Font, NextnextBlock.ToString(), new Vector2(410, 160), Color.White);
+                spriteBatch.DrawString(Font, "Next Block: " + NameList[NextnextBlock], new Vector2(410, 160), Color.White);
             }
             else if (CurrentGameState == "MainMenu")
             {
