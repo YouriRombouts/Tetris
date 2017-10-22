@@ -963,11 +963,11 @@ namespace Tetris
             {
                 if (BlockNumber == 1 || BlockNumber == 3)
                 {
-                    return (int)m_Pos.Y - m_Width;
+                    return (int)m_Pos.Y - m_Height;
                 }
                 else if (BlockNumber == 2)
                 {
-                    return (int)m_Pos.Y - 2 * m_Width;
+                    return (int)m_Pos.Y - 2 * m_Height;
                 }
                 else
                 {
@@ -1101,7 +1101,7 @@ namespace Tetris
         }
         public override float GetMaxPosY()
         {
-            return m_Pos.Y;
+            return m_Pos.Y + m_Height;
         }
     }
 }
