@@ -305,7 +305,7 @@ namespace Tetris
                     catch (IndexOutOfRangeException) { };
                 }
                 //Make sure the block stays in screen horizontally
-                if (m_ActiveBlock.GetMaxPosX() > graphics.GraphicsDevice.Viewport.Width)
+                if (m_ActiveBlock.GetMaxPosX() > 360)
                 {
                     m_ActiveBlock.GBISX();
                 }
