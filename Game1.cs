@@ -222,14 +222,14 @@ namespace Tetris
                     {
                         m_ActiveBlock = new OShape(new Vector2(180, 0));
                     }
-                    /*if (NextBlock == 5)
+                    if (NextBlock == 5)
                     {
-                        m_ActiveBlock = new TShape(new Vector2(180, 0));
+                        m_ActiveBlock = new LShape(new Vector2(180, 0));
                     }
                     if (NextBlock == 6)
                     {
-                        m_ActiveBlock = new TShape(new Vector2(180, 0));
-                    }*/
+                        m_ActiveBlock = new JShape(new Vector2(180, 0));
+                    }
                     else
                     {
 
