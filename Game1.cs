@@ -38,7 +38,7 @@ namespace Tetris
 
         public void SetFullScreen(bool fullscreen = true)
         {
-            screen = new Point(360, 500);
+            screen = new Point(560, 500);
             float scalex = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / (float)screen.X;
             float scaley = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / (float)screen.Y;
             float finalscale = 1;
@@ -76,7 +76,7 @@ namespace Tetris
         {
             // TODO: Add your initialization logic here
             graphics.PreferredBackBufferHeight = 500;
-            graphics.PreferredBackBufferWidth = 360;
+            graphics.PreferredBackBufferWidth = 560;
             graphics.ApplyChanges();
             base.Initialize();
         }
@@ -240,13 +240,7 @@ namespace Tetris
             }
             if (currentKeyboardState.IsKeyDown(Keys.Up))
             {
-                while ( m_ActiveBlock.GetMaxPosY() != 500)
-                {
-                    while(Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] == String.Empty)
-                    {
-                        m_ActiveBlock.Fall();
-                    }                   
-                }
+                m_ActiveBlock.Fall();
             }
             //Make sure the block stays in screen horizontally
             if (m_ActiveBlock.GetMaxPosX() > graphics.GraphicsDevice.Viewport.Width)
@@ -361,7 +355,7 @@ namespace Tetris
                         }
                     }
                 }
-                catch (IndexOutOfRangeException) { /*CurrentGamestate = GameOver*/ };
+                catch (IndexOutOfRangeException) { }
             }            
 
             base.Update(gameTime);

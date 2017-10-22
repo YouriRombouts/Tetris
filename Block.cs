@@ -24,6 +24,28 @@ namespace Tetris
         public float GetPosY() { return m_Pos.Y; }
         public virtual string GetColor() { return m_Color; }
         public int GetRotation() { return m_Rotation; }
+        public int GetNextRotation()
+        {
+            if(m_Rotation == 3)
+            {
+                return 0;
+            }
+            else
+            {
+                return m_Rotation + 1;
+            }
+        }
+        public int GetPrevRotation()
+        {
+            if (m_Rotation == 0)
+            {
+                return 3;
+            }
+            else
+            {
+                return m_Rotation - 1;
+            }
+        }
         public void SetPosX(int NewPosX) { m_Pos.X = NewPosX; }
         public int GetGridPosX() { return (int)(m_Pos.X / 30); }
         public int GetGridPosY() { return (int)(m_Pos.Y / 25); }
@@ -194,11 +216,11 @@ namespace Tetris
         }
         public override Vector2 GetRRotatedGridPos(int BlockNumber)
         {
-            return (new Vector2(GetNextGridPosX(BlockNumber, m_Rotation + 1), GetNextGridPosY(BlockNumber, m_Rotation + 1)));
+            return (new Vector2(GetNextGridPosX(BlockNumber, GetNextRotation()), GetNextGridPosY(BlockNumber, GetNextRotation())));
         }
         public override Vector2 GetLRotatedGridPos(int BlockNumber)
         {
-            return (new Vector2(GetNextGridPosX(BlockNumber, m_Rotation - 1), GetNextGridPosY(BlockNumber, m_Rotation - 1)));
+            return (new Vector2(GetNextGridPosX(BlockNumber, GetPrevRotation()), GetNextGridPosY(BlockNumber, GetPrevRotation())));
         }
         public override float GetMinPosY()
         {
