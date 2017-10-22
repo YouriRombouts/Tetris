@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/YourionY/Documents/GitHub/Tetris/Content/legopurple.png</SourceFile>
-  <SourceTime>2017-10-21T15:03:46.871809+02:00</SourceTime>
-  <DestFile>C:/Users/YourionY/Documents/GitHub/Tetris/Content/bin/Windows/legopurple.xnb</DestFile>
-  <DestTime>2017-10-22T11:20:17.4754837+02:00</DestTime>
+  <SourceFile>C:/Users/timgo/Documents/GitHub/Tetris/Content/legopurple.png</SourceFile>
+  <SourceTime>2017-10-06T20:19:55.8544359+02:00</SourceTime>
+  <DestFile>C:/Users/timgo/Documents/GitHub/Tetris/Content/bin/Windows/legopurple.xnb</DestFile>
+  <DestTime>2017-10-22T13:16:10.4528613+02:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2016-03-30T08:36:08+02:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
