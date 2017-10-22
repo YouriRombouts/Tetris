@@ -290,7 +290,14 @@ namespace Tetris
             }
             if (currentKeyboardState.IsKeyDown(Keys.Up))
             {
-                m_ActiveBlock.Fall();
+                try
+                {
+                    if (Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] == String.Empty && m_ActiveBlock.GetMaxPosY() != 500)
+                    {
+                        m_ActiveBlock.Fall();
+                    }
+                }
+                catch (IndexOutOfRangeException) { };
             }
             //Make sure the block stays in screen horizontally
             if (m_ActiveBlock.GetMaxPosX() > graphics.GraphicsDevice.Viewport.Width)
