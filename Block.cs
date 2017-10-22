@@ -129,7 +129,7 @@ namespace Tetris
             m_Color = "LegoBaby";
             if (IsIShape == true)
             {
-                spriteBatch.Draw(SpriteColor, m_Pos, scale: Scale);
+                spriteBatch.Draw(SpriteColor, new Vector2(GetNextPosX(0), GetNextPosY(0)), scale: Scale);
                 spriteBatch.Draw(SpriteColor, new Vector2(GetNextPosX(1), GetNextPosY(1)), scale: Scale);
                 spriteBatch.Draw(SpriteColor, new Vector2(GetNextPosX(2), GetNextPosY(2)), scale: Scale);
                 spriteBatch.Draw(SpriteColor, new Vector2(GetNextPosX(3), GetNextPosY(3)), scale: Scale);
@@ -204,9 +204,13 @@ namespace Tetris
         }
         public override int GetNextGridPosY(int BlockNumber, int Rotation)
         {
-            if (Rotation == 1 || Rotation == 3)
+            if (Rotation == 1)
             {
                 return GetGridPosY() - 1 * BlockNumber;
+            }
+            else if (Rotation == 3)
+            {
+                return GetGridPosY() + 1 * BlockNumber;
             }
             else if (Rotation == 0 || Rotation == 2)
             {
@@ -224,13 +228,29 @@ namespace Tetris
         }
         public override float GetMinPosY()
         {
-            if (m_Rotation == 1 || m_Rotation == 3)
+            if (m_Rotation == 0 || m_Rotation == 2 || m_Rotation == 1)
             {
-                return (m_Pos.Y - 3 * m_Height);
+                return m_Pos.Y;
             }
             else
             {
-                return base.GetMinPosY();
+                return m_Pos.Y + m_Height * 3;
+            }
+            
+        }
+        public override float GetMaxPosY()
+        {
+            if (m_Rotation == 0 || m_Rotation == 2 || m_Rotation == 1)
+            {
+                return m_Pos.Y + m_Height;
+            }
+            else if (m_Rotation == 3)
+            {
+                return m_Pos.Y + m_Height * 4;
+            }
+            else
+            {
+                return m_Pos.Y;
             }
         }
     }
@@ -807,11 +827,11 @@ namespace Tetris
         }*/
         public override float GetMinPosY()
         {
-            return m_Pos.Y - GetHeight();
+            return m_Pos.Y - GetHeight() * 2;
         }
         public override float GetMaxPosY()
         {
-            return m_Pos.Y + GetHeight() *2;
+            return m_Pos.Y + m_Height * 2;
         }
     }
     class TShape : Block
