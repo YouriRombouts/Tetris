@@ -22,9 +22,9 @@ namespace Tetris
         string[,] Grid;
         bool IsBlockActive, IsLocked;
         Point screen;
-        int /*TargetX,*/ Score;
+        int /*TargetX,*/ Score, TimeInterval = 1000, BlocksSet, Level;
         float TwoTenthSecond;
-        string DrawScore;
+        string DrawScore, DrawLevel;
 
         enum Gamestate
         {
@@ -91,12 +91,14 @@ namespace Tetris
             spriteBatch = new SpriteBatch(GraphicsDevice);
             
             IsBlockActive = false;
+            //Amount of blocks had
+            BlocksSet = 0;
             //initialize score
             Score = 0;
             //start timer
             System.Timers.Timer aTimer = new System.Timers.Timer();
             aTimer.Elapsed += new ElapsedEventHandler(Everysecond);
-            aTimer.Interval = 1000;
+            aTimer.Interval = TimeInterval;
             aTimer.Enabled = true;
             //0.2 second timer
             TwoTenthSecond = 0.2f;
@@ -144,7 +146,12 @@ namespace Tetris
         protected override void Update(GameTime gameTime)
         {
             //Score
-            DrawScore = Score.ToString();
+            DrawScore = "Score: " + Score.ToString();
+            //Level
+            Level = BlocksSet / 10 + 1;
+            DrawLevel = "Level: " + Level.ToString();
+            //Speed up the game
+            TimeInterval = 1000 - ((Level - 1) * 10);
             // TODO: Add your update logic here
             TwoTenthSecond -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -214,7 +221,7 @@ namespace Tetris
             }
             //Move block horizontally
             //left
-            if ((currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyUp(Keys.Left) || (currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyDown(Keys.Left) && TwoTenthSecond < 0)) && m_ActiveBlock.GetGridPosX() != 0)
+            if ((currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyUp(Keys.Left) || (currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyDown(Keys.Left) && TwoTenthSecond < 0)) && m_ActiveBlock.GetMinPosX() > 0)
             {
                 TwoTenthSecond = 0.2f;
                 if (Grid[m_ActiveBlock.GetGridPosX() - 1, m_ActiveBlock.GetGridPosY()] == string.Empty)
@@ -223,7 +230,7 @@ namespace Tetris
                 }
             }
             //right
-            if ((currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyUp(Keys.Right) || (currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyDown(Keys.Right) && TwoTenthSecond < 0)) && m_ActiveBlock.GetGridPosX() != 11)
+            if ((currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyUp(Keys.Right) || (currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyDown(Keys.Right) && TwoTenthSecond < 0)) && m_ActiveBlock.GetMaxPosX() < 360)
             {
                 TwoTenthSecond = 0.2f;
                 if (Grid[m_ActiveBlock.GetGridPosX() + 1, m_ActiveBlock.GetGridPosY()] == string.Empty)
@@ -287,6 +294,7 @@ namespace Tetris
                     if (Grid[m_ActiveBlock.GetGridPosX(), (m_ActiveBlock.GetGridPosY() + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(1, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(1, m_ActiveBlock.GetRotation()) + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(2, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(2, m_ActiveBlock.GetRotation()) + 1)] != String.Empty || Grid[m_ActiveBlock.GetNextGridPosX(3, m_ActiveBlock.GetRotation()), (m_ActiveBlock.GetNextGridPosY(3, m_ActiveBlock.GetRotation()) + 1)] != String.Empty)
                     {
                         IsLocked = true;
+                        BlocksSet++;
                     }
                 }
                 catch (IndexOutOfRangeException) { };
@@ -294,6 +302,7 @@ namespace Tetris
             else if (m_ActiveBlock.GetMaxPosY() == 500)
             {
                 IsLocked = true;
+                BlocksSet++;
             }         
 
             if (IsLocked == true)
@@ -384,7 +393,8 @@ namespace Tetris
             GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin(/*SpriteSortMode.Deferred, null, null, null, null, null, spriteScale*/);            
+            spriteBatch.Begin(/*SpriteSortMode.Deferred, null, null, null, null, null, spriteScale*/);
+            spriteBatch.Draw(SideMenu, new Vector2(360, 0));
             int p = 0;
             for (p = Grid.GetLength(1) - 1; p >= 0; p--)
             {
@@ -398,9 +408,8 @@ namespace Tetris
                 }
             }
             m_ActiveBlock.Draw(spriteBatch, scale, ActiveColor);
-            Vector2 StringLength = Font.MeasureString(DrawScore);
-            spriteBatch.DrawString(Font, DrawScore, new Vector2(graphics.GraphicsDevice.Viewport.Width - StringLength.X, 0), Color.White);
-            spriteBatch.Draw(SideMenu, new Vector2(360, 0));
+            spriteBatch.DrawString(Font, DrawScore, new Vector2(410, 100), Color.White);
+            spriteBatch.DrawString(Font, DrawLevel, new Vector2(410, 120), Color.White);
             spriteBatch.End();
 
             base.Draw(gameTime);
