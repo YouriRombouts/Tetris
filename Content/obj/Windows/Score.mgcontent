@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/timgo/Documents/GitHub/Tetris/Content/Score.spritefont</SourceFile>
-  <SourceTime>2017-10-21T19:57:28.9996948+02:00</SourceTime>
-  <DestFile>C:/Users/timgo/Documents/GitHub/Tetris/Content/bin/Windows/Score.xnb</DestFile>
-  <DestTime>2017-10-22T13:16:10.6373404+02:00</DestTime>
+  <SourceFile>C:/Users/YourionY/Documents/GitHub/Tetris/Content/Score.spritefont</SourceFile>
+  <SourceTime>2017-10-21T15:38:24.788018+02:00</SourceTime>
+  <DestFile>C:/Users/YourionY/Documents/GitHub/Tetris/Content/bin/Windows/Score.xnb</DestFile>
+  <DestTime>2017-10-22T11:20:18.8779837+02:00</DestTime>
   <Importer>FontDescriptionImporter</Importer>
   <ImporterTime>2016-03-30T08:36:08+02:00</ImporterTime>
   <Processor>FontDescriptionProcessor</Processor>
