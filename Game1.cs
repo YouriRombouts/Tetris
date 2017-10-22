@@ -22,7 +22,7 @@ namespace Tetris
         string[,] Grid;
         bool IsBlockActive, IsLocked;
         Point screen;
-        int /*TargetX,*/ Score;
+        int /*TargetX,*/ Score , NextnextBlock;
         float TwoTenthSecond;
         string DrawScore;
 
@@ -164,7 +164,41 @@ namespace Tetris
             //Spawn m_ActiveBlock
             if (IsBlockActive == false)
             {
-                m_ActiveBlock = new OShape(new Vector2(180, 0));
+                Random r = new Random();
+                int NextBlock = NextnextBlock;
+                NextnextBlock = r.Next(0, 5);
+                if (NextBlock == 0)
+                {
+                    m_ActiveBlock = new IShape(new Vector2(180, 0));
+                }
+                if (NextBlock == 1)
+                {
+                    m_ActiveBlock = new ZShape(new Vector2(180, 0));
+                }
+                if (NextBlock == 2)
+                {
+                    m_ActiveBlock = new SShape(new Vector2(180, 0));
+                }
+                if (NextBlock == 3)
+                {
+                    m_ActiveBlock = new TShape(new Vector2(180, 0));
+                }
+                if (NextBlock == 4)
+                {
+                    m_ActiveBlock = new OShape(new Vector2(180, 0));
+                }
+                /*if (NextBlock == 5)
+                {
+                    m_ActiveBlock = new TShape(new Vector2(180, 0));
+                }
+                if (NextBlock == 6)
+                {
+                    m_ActiveBlock = new TShape(new Vector2(180, 0));
+                }*/
+                else
+                {
+
+                }
                 int TargetX = m_ActiveBlock.GetWidth();
                 scale = new Vector2(TargetX / (float)LegoBlue.Width, TargetX / (float)LegoBlue.Width);
                 ActiveColor = Content.Load<Texture2D>(m_ActiveBlock.GetColor());
